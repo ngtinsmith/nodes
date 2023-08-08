@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "pinia": "^2.0.32",
+    "uuid": "^9.0.0",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
   },
@@ -21,7 +22,8 @@
     "@netlify/classnames-template-literals": "^1.0.3",
     "@rushstack/eslint-patch": "^1.2.0",
     "@types/jsdom": "^21.1.0",
-    "@types/node": "^18.14.2",
+    "@types/node": "^18.17.0",
+    "@types/uuid": "^9.0.1",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
     "@vitejs/plugin-vue": "^4.0.0",

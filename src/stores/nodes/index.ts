@@ -9,7 +9,7 @@ import type {
     NodeMap,
     NodeState,
     NodeStatesMap,
-    RawNodeWithState,
+    RawNode,
     TNodeState,
     Tree,
 } from './interfaces';
@@ -18,7 +18,7 @@ import { nodeStates as stateNodeStates } from './static/node-states';
 
 export const useNodes = defineStore('nodes', () => {
     // State
-    const rawNodes = ref<RawNodeWithState[]>([]);
+    const rawNodes = ref<RawNode[]>([]);
     const nodeStates = ref<NodeState[]>([]);
 
     // Tables
@@ -85,11 +85,10 @@ export const useNodes = defineStore('nodes', () => {
         parentId: string;
         title: string;
     }) {
-        const newNode: RawNodeWithState = {
+        const newNode: RawNode = {
             id: uuidv4(),
             title,
             children: [],
-            isExpanded: false,
         };
 
         rawNodes.value.push(newNode);
@@ -116,7 +115,6 @@ export const useNodes = defineStore('nodes', () => {
             if (node.id === id) {
                 return {
                     ...node,
-                    isExpanded: !node.isExpanded,
                 };
             }
 

@@ -3,7 +3,6 @@ export type NodeMark = 'red' | 'green' | 'blue';
 
 export interface NodeState {
     id: NodeId;
-    isExpanded?: boolean; // TODO: remove `is` prefix
     expanded?: boolean;
     primary?: boolean;
     complete?: boolean;
@@ -16,12 +15,9 @@ export interface RawNode {
     id: NodeId;
     title: string;
     children: string[];
-    isPrimary?: boolean;
 }
 
-export type RawNodeWithState = RawNode & NodeState;
-
-export interface Node extends NodeState {
+export interface Node {
     id: NodeId;
     title: string;
     children: Node[];
@@ -31,7 +27,7 @@ export type NodeMap = Record<NodeId, RawNode>;
 export type NodeStatesMap = Record<NodeId, NodeState>;
 
 export interface Tree {
-    id: string;
+    id: NodeId;
     title: string;
     children: Node[];
 }

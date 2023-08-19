@@ -3,7 +3,6 @@ import type {
     NodeId,
     NodeMap,
     RawNode,
-    RawNodeWithState,
 } from '@/stores/nodes/interfaces';
 
 export const hasChildren = (node?: RawNode) => {
@@ -14,7 +13,7 @@ export const hasChildren = (node?: RawNode) => {
 
 export const buildTree = (nodeIds: NodeId[], nodeMap: NodeMap): Node[] => {
     return nodeIds.map((id) => {
-        const node: RawNodeWithState = nodeMap[id];
+        const node: RawNode = nodeMap[id];
         const mappedNode: Node = {
             ...node,
             children: hasChildren(node)

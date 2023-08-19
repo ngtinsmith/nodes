@@ -1,35 +1,43 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
+import { createNodeMap } from '@/utils/array';
+import { buildTree } from '@/utils/tree';
 import type {
     Node,
+    NodeId,
     NodeMap,
-    RawNode,
+    NodeState,
+    NodeStatesMap,
     RawNodeWithState,
+    TNodeState,
     Tree,
 } from './interfaces';
-import { nodes as staticNodes } from './data';
+import { nodes as staticNodes } from './static/nodes';
+import { nodeStates as stateNodeStates } from './static/node-states';
 
 export const useNodes = defineStore('nodes', () => {
+    // State
     const rawNodes = ref<RawNodeWithState[]>([]);
-    const rootIds = computed(() =>
-        rawNodes.value.filter((n) => n.isPrimary).map((n) => n.id),
-    );
+    const nodeStates = ref<NodeState[]>([]);
+
+    // Tables
     const nodeMap = computed(() =>
-        rawNodes.value.reduce<NodeMap>((acc, cur) => {
-            return {
-                ...acc,
-                [cur.id]: cur,
-            };
-        }, {}),
+        rawNodes.value.reduce<NodeMap>(createNodeMap, {}),
+    );
+    const nodeStateMap = computed(() =>
+        nodeStates.value.reduce<NodeStatesMap>(createNodeMap, {}),
+    );
+
+    // Getters
+    const rootIds = computed(() =>
+        nodeStates.value.filter((n) => n.primary).map((n) => n.id),
     );
     const mappedTree = computed(() => buildTree(rootIds.value, nodeMap.value));
-
     const tree = computed<Tree>(() => ({
         id: '0',
         title: 'Root',
         children: mappedTree.value,
-        isExpanded: true,
     }));
 
     const treeRows = computed(() => {
@@ -52,31 +60,22 @@ export const useNodes = defineStore('nodes', () => {
         return nodes;
     });
 
+    const getState = computed(() => (id: NodeId, state: TNodeState) => {
+        const node = nodeStateMap.value[id];
+
+        // If root node
+        if (id === '0') return true;
+
+        return node[state];
+    });
+
+    // Actions
     async function fetchNodes() {
-        rawNodes.value = staticNodes.map((node) => ({
-            ...node,
-            isExpanded: node.children.length > 0,
-        }));
-    }
+        // api - node data
+        rawNodes.value = staticNodes;
 
-    function hasChildren(node?: RawNode) {
-        const childSize = node?.children?.length;
-
-        return childSize && childSize > 0;
-    }
-
-    function buildTree(nodeIds: string[], nodeMap: NodeMap): Node[] {
-        return nodeIds.map((id) => {
-            const node: RawNodeWithState = nodeMap[id];
-            const mappedNode: Node = {
-                ...node,
-                children: hasChildren(node)
-                    ? buildTree(node.children, nodeMap)
-                    : [],
-            };
-
-            return mappedNode;
-        });
+        // api - node states
+        nodeStates.value = stateNodeStates;
     }
 
     function addIntoNode({
@@ -127,6 +126,7 @@ export const useNodes = defineStore('nodes', () => {
 
     return {
         rawNodes,
+        getState,
         tree,
         treeRows,
         fetchNodes,

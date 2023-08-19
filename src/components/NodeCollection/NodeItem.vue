@@ -43,6 +43,11 @@ const add = () => {
 const deleteNode = () => {
     nodeStore.deleteNode(props.node.id, props.parentId);
 };
+
+const isChecked = computed(() => nodeStore.getState(props.node.id, 'complete'));
+const isExpanded = computed(() =>
+    nodeStore.getState(props.node.id, 'expanded'),
+);
 </script>
 
 <template>
@@ -51,8 +56,10 @@ const deleteNode = () => {
         <div v-show="!root" :class="styles.row" data-content="true">
             <div :class="styles.content">
                 <div :class="styles.rowContent">
-                    <input type="checkbox" :class="styles.checkbox" />
-                    <div :class="styles.title">{{ node.title }}</div>
+                    <input type="checkbox" :class="styles.checkbox" :checked="isChecked" />
+                    <div :class="styles.title(!!isChecked)">
+                        {{ node.title }}
+                    </div>
                 </div>
                 <div :class="styles.rowControls">
                     <button @click="add">
@@ -65,7 +72,7 @@ const deleteNode = () => {
             </div>
         </div>
 
-        <div v-show="node.isExpanded" :class="styles.children(!root)" data-children="true" :data-id="node.id">
+        <div v-show="isExpanded" :class="styles.children(!root)" data-children="true" :data-id="node.id">
             <div v-if="treeLine" :class="styles.groupLine(hasChildren)" />
             <NodeItem v-for="(childNode, idx) in node.children" :key="childNode.id" :node="childNode"
                 :dangling-line="hasDanglingLine(childNode, idx)" :parent-id="node.id" :tree-line="treeLine" />
@@ -87,7 +94,11 @@ const styles = computed(() => ({
     ],
 
     content: ['flex', 'flex-1', 'items-center', 'justify-between'],
-    title: ['text-white', 'leading-4', 'text-sm'],
+    title: (isChecked: boolean) => [
+        'leading-4',
+        'text-sm',
+        isChecked ? 'text-gray-500' : 'text-white',
+    ],
     children: (leftGutter: boolean) => [leftGutter && 'ml-7'],
     groupLine: (withChildren: boolean) => [
         'absolute',
@@ -125,7 +136,6 @@ const styles = computed(() => ({
         'border-gray-600',
         'leading-[.5rem]',
         'text-[10px]',
-        'text-gray-400',
     ],
 }));
 </script>

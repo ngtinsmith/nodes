@@ -123,6 +123,19 @@ export const useNodes = defineStore('nodes', () => {
         });
     }
 
+    function toggleNodeCheck(id: string) {
+        nodeStates.value = nodeStates.value.map((node) => {
+            if (node.id === id) {
+                return {
+                    ...node,
+                    complete: !node.complete,
+                };
+            }
+
+            return node;
+        });
+    }
+
     return {
         rawNodes,
         getState,
@@ -132,5 +145,6 @@ export const useNodes = defineStore('nodes', () => {
         addIntoNode,
         deleteNode,
         toggleNode,
+        toggleNodeCheck,
     };
 });

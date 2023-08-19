@@ -44,6 +44,8 @@ const deleteNode = () => {
     nodeStore.deleteNode(props.node.id, props.parentId);
 };
 
+const toggleCheck = () => nodeStore.toggleNodeCheck(props.node.id);
+
 const isChecked = computed(() => nodeStore.getState(props.node.id, 'complete'));
 const isExpanded = computed(() =>
     nodeStore.getState(props.node.id, 'expanded'),
@@ -56,7 +58,7 @@ const isExpanded = computed(() =>
         <div v-show="!root" :class="styles.row" data-content="true">
             <div :class="styles.content">
                 <div :class="styles.rowContent">
-                    <input type="checkbox" :class="styles.checkbox" :checked="isChecked" />
+                    <input type="checkbox" :class="styles.checkbox" :checked="isChecked" @click="toggleCheck" />
                     <div :class="styles.title(!!isChecked)">
                         {{ node.title }}
                     </div>

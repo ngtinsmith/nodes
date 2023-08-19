@@ -111,10 +111,11 @@ export const useNodes = defineStore('nodes', () => {
     }
 
     function toggleNode(id: string) {
-        rawNodes.value = rawNodes.value.map((node) => {
+        nodeStates.value = nodeStates.value.map((node) => {
             if (node.id === id) {
                 return {
                     ...node,
+                    expanded: !node.expanded,
                 };
             }
 

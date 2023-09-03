@@ -11,7 +11,6 @@ import type {
     NodeStatesMap,
     RawNode,
     TNodeState,
-    Tree,
 } from './interfaces';
 import { nodes as staticNodes } from './static/nodes';
 import { nodeStates as stateNodeStates } from './static/node-states';
@@ -34,8 +33,9 @@ export const useNodes = defineStore('nodes', () => {
         nodeStates.value.filter((n) => n.primary).map((n) => n.id),
     );
     const mappedTree = computed(() => buildTree(rootIds.value, nodeMap.value));
-    const tree = computed<Tree>(() => ({
+    const tree = computed<Node>(() => ({
         id: '0',
+        parent_id: null,
         title: 'Root',
         children: mappedTree.value,
     }));
@@ -69,6 +69,42 @@ export const useNodes = defineStore('nodes', () => {
         return node[state];
     });
 
+    // Returns ancestorIds in "bottom-up" direction
+    // @returns { [node.id]: [parent, grand-parent, ..., root-ancestor] }
+    function getAncestorIds(nodeId: NodeId) {
+        const path: NodeId[] = [];
+
+        // TODO: try iteration
+        function getPath(node: RawNode) {
+            if (!node.parent_id) return;
+
+            const parentNode = nodeMap.value[node.parent_id];
+
+            path.push(parentNode.id);
+            getPath(parentNode);
+        }
+
+        getPath(nodeMap.value[nodeId]);
+
+        return path;
+    }
+
+    // Lookup table for node path(ancestors) to root
+    const nodePath = computed(() => {
+        return rawNodes.value.reduce<Record<NodeId, null | NodeId[]>>(
+            (acc, node) => {
+                return {
+                    ...acc,
+                    [node.id]:
+                        node.parent_id === null
+                            ? null
+                            : getAncestorIds(node.id),
+                };
+            },
+            {},
+        );
+    });
+
     // Actions
     async function fetchNodes() {
         // api - node data
@@ -87,6 +123,7 @@ export const useNodes = defineStore('nodes', () => {
     }) {
         const newNode: RawNode = {
             id: uuidv4(),
+            parent_id: parentId,
             title,
             children: [],
         };
@@ -138,9 +175,17 @@ export const useNodes = defineStore('nodes', () => {
 
     return {
         rawNodes,
-        getState,
+        nodeStates,
         tree,
         treeRows,
+
+        // getters
+        nodeMap,
+        nodeStateMap,
+        getState,
+        nodePath,
+
+        // handlers
         fetchNodes,
         addIntoNode,
         deleteNode,

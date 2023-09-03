@@ -3,33 +3,28 @@ export type NodeMark = 'red' | 'green' | 'blue';
 
 export interface NodeState {
     id: NodeId;
-    expanded?: boolean;
+    expanded: boolean;
     primary?: boolean;
-    complete?: boolean;
+    complete: boolean;
     modified?: string;
     locked?: boolean;
     mark?: NodeMark;
 }
 
-export interface RawNode {
+export interface NodeProperties {
     id: NodeId;
     title: string;
-    children: string[];
+    parent_id: NodeId | null;
 }
 
-export interface Node {
-    id: NodeId;
-    title: string;
+export type RawNode = NodeProperties & {
+    children: NodeId[];
+};
+
+export type Node = NodeProperties & {
     children: Node[];
-}
+};
 
 export type NodeMap = Record<NodeId, RawNode>;
 export type NodeStatesMap = Record<NodeId, NodeState>;
-
-export interface Tree {
-    id: NodeId;
-    title: string;
-    children: Node[];
-}
-
 export type TNodeState = keyof Pick<NodeState, 'expanded' | 'complete'>;

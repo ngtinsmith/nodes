@@ -53,17 +53,34 @@ const isExpanded = computed(() =>
 </script>
 
 <template>
-    <div :class="styles.node" :data-root="root">
-        <div v-if="danglingLine && treeLine" :class="styles.groupLineCover" data-cover="true" />
-        <div v-show="!root" :class="styles.row" data-content="true">
+    <div
+        class="node"
+        :data-root="root"
+        data-node
+    >
+        <div
+            v-if="danglingLine && treeLine"
+            :class="styles.groupLineCover"
+            data-cover="true"
+        />
+        <div
+            v-show="!root"
+            class="row"
+            data-content="true"
+        >
             <div :class="styles.content">
                 <div :class="styles.rowContent">
-                    <input type="checkbox" :class="styles.checkbox" :checked="isChecked" @click="toggleCheck" />
+                    <input
+                        type="checkbox"
+                        :class="styles.checkbox"
+                        :checked="isChecked"
+                        @click="toggleCheck"
+                    />
                     <div :class="styles.title(!!isChecked)">
                         {{ node.title }}
                     </div>
                 </div>
-                <div :class="styles.rowControls">
+                <div class="row-controls">
                     <button @click="add">
                         <Add :class="styles.ctrlIcon" />
                     </button>
@@ -74,27 +91,58 @@ const isExpanded = computed(() =>
             </div>
         </div>
 
-        <div v-show="isExpanded" :class="styles.children(!root)" data-children="true" :data-id="node.id">
-            <div v-if="treeLine" :class="styles.groupLine(hasChildren)" />
-            <NodeItem v-for="(childNode, idx) in node.children" :key="childNode.id" :node="childNode"
-                :dangling-line="hasDanglingLine(childNode, idx)" :parent-id="node.id" :tree-line="treeLine" />
+        <div
+            v-show="isExpanded"
+            :class="styles.children(!root)"
+            data-children="true"
+            :data-id="node.id"
+        >
+            <div
+                v-if="treeLine"
+                :class="styles.groupLine(hasChildren)"
+            />
+            <VNode
+                v-for="(childNode, idx) in node.children"
+                :key="childNode.id"
+                :node="childNode"
+                :dangling-line="hasDanglingLine(childNode, idx)"
+                :parent-id="node.id"
+                :tree-line="treeLine"
+            />
         </div>
     </div>
 </template>
 
+<style lang="scss" scoped>
+.node {
+    background-color: transparent;
+
+    .row {
+        display: flex;
+        padding-inline: 0.25rem;
+        background-color: transparent;
+
+        &:hover {
+            background-color: var(--v-transparent-white-5);
+        }
+    }
+
+    .row-controls {
+        display: flex;
+        justify-content: flex-end;
+        flex: 1;
+        opacity: 0;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+}
+</style>
+
 <script lang="ts">
 const styles = computed(() => ({
-    node: [],
-    row: ['flex', 'px-2', 'hover:bg-neutral-800'],
     rowContent: ['flex'],
-    rowControls: [
-        'flex',
-        'justify-end',
-        'flex-1',
-        'opacity-0',
-        'hover:opacity-100',
-    ],
-
     content: ['flex', 'flex-1', 'items-center', 'justify-between'],
     title: (isChecked: boolean) => [
         'leading-4',

@@ -8,8 +8,8 @@
 .canvas {
     display: flex;
     justify-content: flex-start;
-    gap: 0.5rem;
-    padding: 0.5rem;
+    gap: rem(8);
+    padding: rem(8);
     width: 100%;
     height: 100%;
     background-color: var(--v-indigo-200);

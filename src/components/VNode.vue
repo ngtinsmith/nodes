@@ -53,39 +53,33 @@ const isExpanded = computed(() =>
 </script>
 
 <template>
-    <div
-        class="node"
-        :data-root="root"
-        data-node
-    >
+    <div class="node">
         <div
             v-if="danglingLine && treeLine"
-            :class="styles.groupLineCover"
-            data-cover="true"
+            class="group-line-cover"
         />
         <div
             v-show="!root"
             class="row"
-            data-content="true"
         >
-            <div :class="styles.content">
-                <div :class="styles.rowContent">
+            <div class="content">
+                <div class="row-content">
                     <input
                         type="checkbox"
-                        :class="styles.checkbox"
+                        class="checkbox"
                         :checked="isChecked"
                         @click="toggleCheck"
                     />
-                    <div :class="styles.title(!!isChecked)">
+                    <div :class="['title', isChecked && 'is-checked']">
                         {{ node.title }}
                     </div>
                 </div>
                 <div class="row-controls">
                     <button @click="add">
-                        <Add :class="styles.ctrlIcon" />
+                        <Add class="toggle-icon" />
                     </button>
                     <button @click="deleteNode">
-                        <Close :class="styles.ctrlIcon" />
+                        <Close class="toggle-icon" />
                     </button>
                 </div>
             </div>
@@ -93,13 +87,11 @@ const isExpanded = computed(() =>
 
         <div
             v-show="isExpanded"
-            :class="styles.children(!root)"
-            data-children="true"
-            :data-id="node.id"
+            :class="['children', root && 'no-gutter']"
         >
             <div
                 v-if="treeLine"
-                :class="styles.groupLine(hasChildren)"
+                :class="['group-line', hasChildren && 'bottom-line']"
             />
             <VNode
                 v-for="(childNode, idx) in node.children"
@@ -127,6 +119,10 @@ const isExpanded = computed(() =>
         }
     }
 
+    .row-content {
+        display: flex;
+    }
+
     .row-controls {
         display: flex;
         justify-content: flex-end;
@@ -137,55 +133,65 @@ const isExpanded = computed(() =>
             opacity: 1;
         }
     }
+
+    .content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex: 1;
+    }
+
+    .title {
+        line-height: rem(16);
+        font-size: rem(14);
+        color: var(--v-white);
+
+        &.is-checked {
+            color: var(--v-slate-500);
+        }
+    }
+
+    .children {
+        padding-left: rem(28);
+
+        &.no-gutter {
+            padding-left: 0;
+        }
+    }
+
+    .group-line {
+        position: absolute;
+        top: rem(4);
+        bottom: rem(12);
+        left: (20);
+        width: rem(8);
+        border-left: 1px solid var(--v-slate-500);
+
+        &.bottom-line {
+            border-bottom: 1px solid var(--v-slate-500);
+        }
+    }
+
+    .group-line-cover {
+        position: absolute;
+        top: rem(16);
+        bottom: rem(8);
+        left: rem(12);
+        width: rem(16);
+        border-top: 1px solid var(--v-slate-500);
+        background-color: var(--v-slate-900);
+    }
+
+    .toggle-icon {
+        width: rem(24);
+        height: rem(24);
+        fill: var(--v-slate-500)
+    }
+
+    .checkbox {
+        margin-right: rem(12);
+        width: rem(16);
+        height: rem(16);
+    }
 }
 </style>
-
-<script lang="ts">
-const styles = computed(() => ({
-    rowContent: ['flex'],
-    content: ['flex', 'flex-1', 'items-center', 'justify-between'],
-    title: (isChecked: boolean) => [
-        'leading-4',
-        'text-sm',
-        isChecked ? 'text-gray-500' : 'text-white',
-    ],
-    children: (leftGutter: boolean) => [leftGutter && 'ml-7'],
-    groupLine: (withChildren: boolean) => [
-        'absolute',
-        'top-1',
-        'bottom-3',
-        'left-[19px]',
-        'w-2',
-        'border-l',
-        'border-l-gray-500',
-        ...[withChildren && ['border-b', 'border-b-gray-500']],
-    ],
-    groupLineCover: [
-        'absolute',
-        'top-4',
-        'bottom-2',
-        'left-3',
-        'w-4',
-        'border-t',
-        'border-t-gray-500',
-        'bg-neutral-900',
-    ],
-    icon: ['w-6', 'h-6', 'fill-gray-500'],
-    toggleBtn: (show: boolean) => [
-        'bg-neutral-900',
-        'mr-1',
-        show ? 'visible' : 'invisible',
-    ],
-    ctrlIcon: ['w-6', 'h-6', 'fill-gray-500'],
-    checkbox: [
-        'mr-3',
-        'w-4',
-        'h-4',
-        'rounded-full',
-        'border',
-        'border-gray-600',
-        'leading-[.5rem]',
-        'text-[10px]',
-    ],
-}));
-</script>

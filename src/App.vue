@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import NodeCollection from './components/NodeCollection/NodeCollection.vue';
+import VCard from './components/VCard.vue';
+import VCanvas from './layouts/VCanvas.vue';
 </script>
 
 <template>
     <header class="container mx-auto border border-indigo-50">header</header>
     <main>
         <div :class="styles.content">
-            <div :class="styles.nodeCollection">
-                <NodeCollection title="node collections" />
-            </div>
+            <VCanvas>
+                <VCard title="header" />
+                <VCard title="header 2" />
+            </VCanvas>
         </div>
     </main>
     <footer class="container mx-auto border border-indigo-50">
@@ -27,6 +29,5 @@ const styles = computed(() => ({
         'items-center',
         'justify-between',
     ],
-    nodeCollection: ['h-full'],
 }));
 </script>

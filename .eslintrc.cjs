@@ -9,10 +9,8 @@ module.exports = {
     '@vue/eslint-config-typescript',
     '@vue/eslint-config-prettier/skip-formatting',
     'plugin:@typescript-eslint/recommended',
-    'plugin:tailwindcss/recommended',
     'prettier'
   ],
-  plugins: ['tailwindcss'],
   parserOptions: {
     ecmaVersion: 'latest'
   },

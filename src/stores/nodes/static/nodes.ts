@@ -3,39 +3,45 @@ import type { RawNode } from '../interfaces';
 export const nodes: RawNode[] = [
     {
         id: '1',
+        parent_id: null,
         title: 'Style Card',
         children: ['2', '3', '01'],
-        isPrimary: true,
     },
     {
         id: '01',
+        parent_id: '1',
         title: 'Node 01',
         children: ['011'],
     },
     {
         id: '011',
+        parent_id: '01',
         title: 'Node 011',
         children: [],
     },
     {
         id: '2',
+        parent_id: '1',
         title: 'Node 2',
         children: ['22', '222'],
     },
     {
         id: '22',
+        parent_id: '2',
         title: 'Node 22',
         // children: ['4']
         children: [],
     },
     {
         id: '222',
+        parent_id: '2',
         title: 'Node 222',
         // children: ['4']
         children: [],
     },
     {
         id: '3',
+        parent_id: '1',
         title: 'Node 3',
         children: ['333'],
     },
@@ -46,11 +52,13 @@ export const nodes: RawNode[] = [
     // },
     {
         id: '333',
+        parent_id: '3',
         title: 'Node 333',
         children: ['3333'],
     },
     {
         id: '3333',
+        parent_id: '333',
         title: 'Node 3333',
         children: [],
     },
@@ -61,17 +69,19 @@ export const nodes: RawNode[] = [
     // },
     {
         id: '5',
+        parent_id: null,
         title: 'Node 5',
         children: ['6', '8'],
-        isPrimary: true,
     },
     {
         id: '6',
+        parent_id: '5',
         title: 'Node 6',
         children: ['7'],
     },
     {
         id: '7',
+        parent_id: '6',
         title: 'Node 7',
         children: [],
     },
@@ -87,6 +97,7 @@ export const nodes: RawNode[] = [
     // },
     {
         id: '8',
+        parent_id: '5',
         title: 'Node 8',
         children: [],
     },
@@ -94,19 +105,16 @@ export const nodes: RawNode[] = [
     //     id: '9',
     //     title: 'Node 9090',
     //     children: [],
-    //     isPrimary: true
     // },
     // {
     //     id: '10',
     //     title: 'Node 10',
     //     children: [],
-    //     isPrimary: true
     // },
     // {
     //     id: '11',
     //     title: 'Node 11',
     //     children: ['111', '1111'],
-    //     isPrimary: true
     // },
     // {
     //     id: '111',

@@ -33,33 +33,33 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
     <div class="card">
         <div class="header">{{ props.title }}</div>
         <div class="content">
-            <div :class="styles.lineColumn">
+            <div class="line-column">
                 <div
                     v-for="node in nodeStore.treeRows"
                     :key="node.id"
-                    :class="styles.lineColRow(isAncestorVisible(node.id))"
+                    :class="['sign', !isAncestorVisible(node.id) && 'hidden']"
                 >
                     <button
                         v-if="node.children.length > 0"
-                        :class="styles.btnToggle"
+                        class="sign-toggle"
                         @click="nodeStore.toggleNode(node.id)"
                     >
                         <ChevronDown
                             v-if="nodeStore.getState(node.id, 'expanded')"
-                            :class="styles.icon"
+                            class="sign-icon"
                         />
                         <ChevronRight
                             v-else
-                            :class="styles.icon"
+                            class="sign-icon"
                         />
                     </button>
                     <div
                         v-else
-                        :class="styles.lineEmpty"
+                        class="sign-empty"
                     />
                 </div>
             </div>
-            <div :class="styles.nodeTree">
+            <div class="tree">
                 <VNode
                     root
                     :node="nodeStore.tree"
@@ -78,8 +78,8 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
     height: 100%;
     min-height: 80vh;
     background-color: var(--v-slate-800);
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+    padding: rem(8);
+    border-radius: rem(8);
 
     $card: &;
 
@@ -89,11 +89,45 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
 
     .content {
         display: flex;
-        padding-block: 1rem;
+        padding-block: rem(16);
         position: relative;
         flex: 1;
         background-color: var(--v-slate-900);
-        border-radius: 0.25rem;
+        border-radius: rem(4);
+    }
+
+    .sign {
+        padding-inline: rem(4);
+        height: rem(24);
+        line-height: rem(24);
+        text-align: center;
+
+        &.hidden {
+            display: none;
+        }
+    }
+
+    .sign-empty {
+        height: rem(24);
+        width: 100%;
+    }
+
+    .sign-toggle {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .sign-icon {
+        width: rem(24);
+        height: rem(24);
+        fill: var(--v-slate-600);
+    }
+
+    .tree {
+        display: flex;
+        justify-content: flex-start;
+        flex: 1;
     }
 
     .footer {
@@ -101,22 +135,3 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
     }
 }
 </style>
-
-<script lang="ts">
-const styles = computed(() => ({
-    lineColumn: [],
-    nodeTree: ['flex-1', 'flex', 'justify-start'],
-
-    lineColRow: (isVisible: boolean) => [
-        'px-2',
-        'h-6',
-        'leading-6',
-        'text-center',
-        isVisible ? 'visible' : 'hidden',
-    ],
-    lineEmpty: ['h-6', 'w-full'],
-
-    btnToggle: ['flex', 'justify-center', 'w-full'],
-    icon: ['w-6', 'h-6', 'fill-gray-500'],
-}));
-</script>

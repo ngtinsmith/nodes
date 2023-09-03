@@ -4,6 +4,7 @@ import { useNodes } from '@/stores/nodes';
 import ChevronRight from '/public/assets/icons/chevron-right.svg?component';
 import ChevronDown from '/public/assets/icons/chevron-down.svg?component';
 import NodeItem from './NodeItem.vue';
+import type { NodeId } from '@/stores/nodes/interfaces';
 
 export interface NodeCollectionProps {
     title: string;
@@ -16,6 +17,16 @@ const nodeStore = useNodes();
 onMounted(() => {
     nodeStore.fetchNodes();
 });
+
+const isAncestorVisible = computed(() => (nodeId: NodeId) => {
+    const ancestorIds = nodeStore.nodePath[nodeId];
+
+    // rootNodes has no ancestor (null)
+    // rootNodes are always visible
+    if (ancestorIds === null) return true;
+
+    return ancestorIds?.every((id) => nodeStore.nodeStateMap[id].expanded);
+});
 </script>
 
 <template>
@@ -24,14 +35,14 @@ onMounted(() => {
             <div :class="styles.header">{{ props.title }}</div>
             <div :class="styles.inner">
                 <div :class="styles.lineColumn">
-                    <div v-for="(node, i) in nodeStore.treeRows" :key="i" :class="styles.lineColRow">
-                        <button :class="styles.btnToggle" v-if="node.children.length > 0"
+                    <div v-for="node in nodeStore.treeRows" :key="node.id"
+                        :class="styles.lineColRow(isAncestorVisible(node.id))">
+                        <button v-if="node.children.length > 0" :class="styles.btnToggle"
                             @click="nodeStore.toggleNode(node.id)">
                             <ChevronDown v-if="nodeStore.getState(node.id, 'expanded')" :class="styles.icon" />
                             <ChevronRight v-else :class="styles.icon" />
                         </button>
-                        <span :class="styles.lineColumnEmpty" v-else>
-                        </span>
+                        <div v-else :class="styles.lineEmpty" />
                     </div>
                 </div>
                 <div :class="styles.nodeTree">
@@ -52,8 +63,14 @@ const styles = computed(() => ({
     lineColumn: [],
     nodeTree: ['flex-1'],
 
-    lineColRow: ['px-2', 'leading-6', 'text-center', 'h-6'],
-    lineColumnEmpty: ['h-6', 'w-full', 'bg-red-700'],
+    lineColRow: (isVisible: boolean) => [
+        'px-2',
+        'h-6',
+        'leading-6',
+        'text-center',
+        isVisible ? 'visible' : 'hidden',
+    ],
+    lineEmpty: ['h-6', 'w-full'],
 
     btnToggle: ['flex', 'justify-center', 'w-full'],
     icon: ['w-6', 'h-6', 'fill-gray-500'],

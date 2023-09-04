@@ -8,7 +8,12 @@ defineProps<Props>();
 </script>
 
 <template>
-    <input class="v-checkbox" type="checkbox" :checked="checked" @click="onClick" />
+    <input
+        class="v-checkbox"
+        type="checkbox"
+        :checked="checked"
+        @click="onClick"
+    />
 </template>
 
 <style lang="scss" scoped>
@@ -30,7 +35,7 @@ defineProps<Props>();
     &:checked {
         border-color: transparent;
         background-color: currentColor;
-        background-image: url('/public/assets/icons/checkmark.svg');
+        background-image: url('assets/icons/checkmark.svg');
         background-size: 70% 70%;
         background-position: 50%;
         background-repeat: no-repeat;

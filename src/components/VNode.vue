@@ -21,15 +21,15 @@ const childrenSize = computed(() => props.node.children.length);
 const hasChildren = computed(() => childrenSize.value > 0);
 
 const hasDanglingLine = computed(() => (childNode: Node, idx: number) => {
-    // last
-    const isLast = idx > 0 && idx === props.node.children.length - 1;
-    const hasManyChildren = childNode.children.length > 0;
-
     // first
     const isFirstWithChildren =
         idx === 0 &&
         childNode.children.length === 1 &&
         childrenSize.value === 1;
+
+    // last
+    const isLast = idx > 0 && idx === props.node.children.length - 1;
+    const hasManyChildren = childNode.children.length > 0;
 
     return (isLast && hasManyChildren) || isFirstWithChildren;
 });
@@ -56,7 +56,11 @@ const isExpanded = computed(() =>
 <template>
     <div class="node">
         <div
-            v-if="danglingLine && treeLine"
+            v-if="
+                danglingLine &&
+                treeLine &&
+                !nodeStore.nodeStateMap[node.id].primary
+            "
             class="group-line-cover"
         />
         <div
@@ -89,7 +93,7 @@ const isExpanded = computed(() =>
             :class="['children', root && 'no-gutter']"
         >
             <div
-                v-if="treeLine"
+                v-if="treeLine && !root"
                 :class="['group-line', hasChildren && 'bottom-line']"
             />
             <VNode
@@ -106,6 +110,8 @@ const isExpanded = computed(() =>
 
 <style lang="scss" scoped>
 .node {
+    --tree-line-color: var(--v-slate-600);
+
     background-color: transparent;
 
     .row {
@@ -161,25 +167,26 @@ const isExpanded = computed(() =>
     }
 
     .group-line {
+
         position: absolute;
-        top: rem(4);
-        bottom: rem(12);
-        left: (20);
+        top: 0;
+        bottom: rem(4);
+        left: rem(10);
         width: rem(8);
-        border-left: 1px solid var(--v-slate-500);
+        border-left: 1px solid var(--tree-line-color);
 
         &.bottom-line {
-            border-bottom: 1px solid var(--v-slate-500);
+            border-bottom: 1px solid var(--tree-line-color);
         }
     }
 
     .group-line-cover {
         position: absolute;
-        top: rem(16);
-        bottom: rem(8);
-        left: rem(12);
-        width: rem(16);
-        border-top: 1px solid var(--v-slate-500);
+        top: rem(20);
+        bottom: 0;
+        left: -18px;
+        width: 8px;
+        border-top: 1px solid var(--tree-line-color);
         background-color: var(--v-slate-900);
     }
 

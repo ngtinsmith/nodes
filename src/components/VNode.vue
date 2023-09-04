@@ -4,6 +4,7 @@ import { useNodes } from '@/stores/nodes';
 import type { Node } from '@/stores/nodes/interfaces';
 import Add from '/public/assets/icons/add-line.svg?component';
 import Close from '/public/assets/icons/close-line.svg?component';
+import VCheckbox from '@/components/atoms/VCheckbox.vue';
 
 export interface NodeItemProps {
     node: Node;
@@ -64,9 +65,7 @@ const isExpanded = computed(() =>
         >
             <div class="content">
                 <div class="row-content">
-                    <input
-                        type="checkbox"
-                        class="checkbox"
+                    <VCheckbox
                         :checked="isChecked"
                         @click="toggleCheck"
                     />
@@ -121,6 +120,8 @@ const isExpanded = computed(() =>
 
     .row-content {
         display: flex;
+        align-items: center;
+        column-gap: rem(10);
     }
 
     .row-controls {
@@ -144,7 +145,7 @@ const isExpanded = computed(() =>
     .title {
         line-height: rem(16);
         font-size: rem(14);
-        color: var(--v-white);
+        color: var(--v-slate-100);
 
         &.is-checked {
             color: var(--v-slate-500);
@@ -185,13 +186,7 @@ const isExpanded = computed(() =>
     .toggle-icon {
         width: rem(24);
         height: rem(24);
-        fill: var(--v-slate-500)
-    }
-
-    .checkbox {
-        margin-right: rem(12);
-        width: rem(16);
-        height: rem(16);
+        fill: var(--v-slate-500);
     }
 }
 </style>

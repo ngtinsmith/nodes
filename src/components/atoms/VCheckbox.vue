@@ -1,0 +1,45 @@
+<script lang="ts" setup>
+interface Props {
+    checked: boolean;
+    onClick: () => void;
+}
+
+defineProps<Props>();
+</script>
+
+<template>
+    <input class="v-checkbox" type="checkbox" :checked="checked" @click="onClick" />
+</template>
+
+<style lang="scss" scoped>
+.v-checkbox {
+    appearance: none;
+    print-color-adjust: exact;
+    display: inline-block;
+    background-origin: border-box;
+    user-select: none;
+    flex-shrink: 0;
+    height: rem(14);
+    width: rem(14);
+    color: var(--v-yellow-200);
+    background-color: transparent;
+    border-color: var(--v-slate-500);
+    border-width: 1px;
+    border-radius: 2px;
+
+    &:checked {
+        border-color: transparent;
+        background-color: currentColor;
+        background-image: url('/public/assets/icons/checkmark.svg');
+        background-size: 70% 70%;
+        background-position: 50%;
+        background-repeat: no-repeat;
+
+        &:focus,
+        &:hover {
+            border-color: transparent;
+            background-color: currentColor;
+        }
+    }
+}
+</style>

@@ -53,7 +53,9 @@
 /* app variables */
 :root {
     /* colors */
-    --v-slate-500: #64748B;
+    --v-yellow-200: #fef08a;
+    --v-slate-100: #F1F5F9;
+    --v-slate-500: #64748b;
     --v-slate-600: #475569;
     --v-slate-800: #1e293b;
     --v-slate-900: #0f172a;

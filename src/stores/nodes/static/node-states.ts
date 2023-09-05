@@ -35,6 +35,24 @@ export const nodeStates: NodeState[] = [
         id: '222',
         primary: false,
         expanded: false,
+        complete: true,
+    },
+    {
+        id: '2222',
+        primary: false,
+        expanded: false,
+        complete: false,
+    },
+    {
+        id: '2222.1',
+        primary: false,
+        expanded: false,
+        complete: false,
+    },
+    {
+        id: '22222',
+        primary: false,
+        expanded: false,
         complete: false,
     },
     {
@@ -43,13 +61,22 @@ export const nodeStates: NodeState[] = [
         expanded: true,
         complete: false,
     },
-    // {
-    //     id: '33',
-    // },
+    {
+        id: '33',
+        primary: false,
+        expanded: false,
+        complete: true,
+    },
     {
         id: '333',
         primary: false,
         expanded: true,
+        complete: false,
+    },
+    {
+        id: '333.1',
+        primary: false,
+        expanded: false,
         complete: false,
     },
     {
@@ -58,9 +85,12 @@ export const nodeStates: NodeState[] = [
         expanded: false,
         complete: false,
     },
-    // {
-    //     id: '4',
-    // },
+    {
+        id: '4',
+        primary: false,
+        expanded: false,
+        complete: false,
+    },
     {
         id: '5',
         primary: true,
@@ -70,7 +100,7 @@ export const nodeStates: NodeState[] = [
     {
         id: '6',
         primary: false,
-        expanded: true,
+        expanded: false,
         complete: false,
     },
     {

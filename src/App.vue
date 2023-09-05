@@ -4,12 +4,12 @@ import VCanvas from './layouts/VCanvas.vue';
 </script>
 
 <template>
-    <header class="header">header</header>
+    <header class="header"></header>
     <main>
         <div class="content">
             <VCanvas>
-                <VCard title="header" />
-                <VCard title="header 2" />
+                <VCard title="Node Tree A" />
+                <VCard title="Node Tree B" />
             </VCanvas>
         </div>
     </main>
@@ -17,7 +17,13 @@ import VCanvas from './layouts/VCanvas.vue';
 
 <style lang="scss" scoped>
 .header {
+    height: rem(48);
     margin-inline: auto;
+    background-color: var(--v-gray-900);
+}
+
+main {
+    height: calc(100vh - rem(48));
 }
 
 .content {
@@ -25,5 +31,6 @@ import VCanvas from './layouts/VCanvas.vue';
     align-items: center;
     justify-content: space-between;
     margin-inline: auto;
+    height: 100%;
 }
 </style>

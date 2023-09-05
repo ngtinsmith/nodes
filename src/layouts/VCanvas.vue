@@ -7,6 +7,7 @@
 <style lang="scss" scoped>
 .canvas {
     display: flex;
+    align-items: flex-start;
     justify-content: flex-start;
     gap: rem(8);
     padding: rem(8);

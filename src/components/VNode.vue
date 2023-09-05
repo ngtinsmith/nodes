@@ -89,10 +89,12 @@ const isExpanded = computed(() =>
                         v-else
                         class="sign-empty"
                     />
-                    <VCheckbox
-                        :checked="isChecked"
-                        @click="toggleCheck"
-                    />
+                    <div class="checkbox-wrapper">
+                        <VCheckbox
+                            :checked="isChecked"
+                            @click="toggleCheck"
+                        />
+                    </div>
                     <div :class="['title', isChecked && 'is-checked']">
                         {{ node.title }}
                     </div>
@@ -152,7 +154,6 @@ const isExpanded = computed(() =>
     .row-content {
         display: flex;
         align-items: center;
-        column-gap: rem(4);
     }
 
     .row-controls {
@@ -177,7 +178,6 @@ const isExpanded = computed(() =>
         line-height: rem(16);
         font-size: rem(14);
         color: var(--v-slate-100);
-        margin-left: rem(4);
 
         &.is-checked {
             color: var(--v-slate-500);
@@ -185,7 +185,7 @@ const isExpanded = computed(() =>
     }
 
     .children {
-        padding-left: rem(22);
+        padding-left: rem(23);
 
         &.no-gutter {
             padding-left: 0;
@@ -196,7 +196,7 @@ const isExpanded = computed(() =>
         position: absolute;
         top: 2px;
         bottom: rem(10);
-        left: rem(34);
+        left: rem(36);
         width: rem(8);
         border-left: 1px solid var(--tree-line-color);
 
@@ -210,7 +210,7 @@ const isExpanded = computed(() =>
         top: rem(12);
         bottom: 0;
         left: rem(12);
-        width: rem(8);
+        width: rem(10);
         border-top: 1px solid var(--tree-line-color);
         background-color: var(--v-slate-900);
     }
@@ -219,6 +219,10 @@ const isExpanded = computed(() =>
         width: rem(24);
         height: rem(24);
         fill: var(--v-slate-500);
+    }
+
+    .checkbox-wrapper {
+        margin-inline: rem(6) rem(8);
     }
 
     .sign-empty {

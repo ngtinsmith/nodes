@@ -17,6 +17,8 @@ defineProps<Props>();
 </template>
 
 <style lang="scss" scoped>
+$size: 14;
+
 .v-checkbox {
     appearance: none;
     print-color-adjust: exact;
@@ -24,8 +26,8 @@ defineProps<Props>();
     background-origin: border-box;
     user-select: none;
     flex-shrink: 0;
-    height: rem(14);
-    width: rem(14);
+    height: rem($size);
+    width: rem($size);
     color: var(--v-yellow-200);
     background-color: transparent;
     border-color: var(--v-slate-600);

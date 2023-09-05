@@ -53,7 +53,13 @@
 /* app variables */
 :root {
     /* colors */
+    --v-white: #ffffff;
+    --v-black: #000000;
+
+    --v-gray-900: #111827;
+
     --v-yellow-200: #fef08a;
+    --v-slate-50: #f8fafc;
     --v-slate-100: #F1F5F9;
     --v-slate-400: #94A3B8;
     --v-slate-500: #64748b;
@@ -61,9 +67,6 @@
     --v-slate-800: #1e293b;
     --v-slate-900: #0f172a;
     --v-indigo-200: #c7d2fe;
-
-    --v-white: #ffffff;
-    --v-black: #000000;
 
     /* transparent */
     --v-transparent-white-5: rgba(255, 255, 255, 0.05);

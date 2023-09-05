@@ -4,6 +4,8 @@ import { useNodes } from '@/stores/nodes';
 import type { Node } from '@/stores/nodes/interfaces';
 import Add from '/public/assets/icons/add-line.svg?component';
 import Close from '/public/assets/icons/close-line.svg?component';
+import ChevronRight from '/public/assets/icons/chevron-right.svg?component';
+import ChevronDown from '/public/assets/icons/chevron-down.svg?component';
 import VCheckbox from '@/components/atoms/VCheckbox.vue';
 
 export interface NodeItemProps {
@@ -69,6 +71,24 @@ const isExpanded = computed(() =>
         >
             <div class="content">
                 <div class="row-content">
+                    <button
+                        v-if="node.children.length > 0"
+                        class="sign-toggle"
+                        @click="nodeStore.toggleNode(node.id)"
+                    >
+                        <ChevronDown
+                            v-if="nodeStore.getState(node.id, 'expanded')"
+                            class="sign-icon"
+                        />
+                        <ChevronRight
+                            v-else
+                            class="sign-icon"
+                        />
+                    </button>
+                    <div
+                        v-else
+                        class="sign-empty"
+                    />
                     <VCheckbox
                         :checked="isChecked"
                         @click="toggleCheck"
@@ -112,6 +132,7 @@ const isExpanded = computed(() =>
 .node {
     --tree-line-color: var(--v-slate-600);
 
+    width: 100%;
     background-color: transparent;
 
     .row {
@@ -121,13 +142,17 @@ const isExpanded = computed(() =>
 
         &:hover {
             background-color: var(--v-transparent-white-5);
+
+            .sign-toggle {
+                background-color: #1b2335;
+            }
         }
     }
 
     .row-content {
         display: flex;
         align-items: center;
-        column-gap: rem(10);
+        column-gap: rem(4);
     }
 
     .row-controls {
@@ -152,6 +177,7 @@ const isExpanded = computed(() =>
         line-height: rem(16);
         font-size: rem(14);
         color: var(--v-slate-100);
+        margin-left: rem(4);
 
         &.is-checked {
             color: var(--v-slate-500);
@@ -159,7 +185,7 @@ const isExpanded = computed(() =>
     }
 
     .children {
-        padding-left: rem(28);
+        padding-left: rem(22);
 
         &.no-gutter {
             padding-left: 0;
@@ -167,11 +193,10 @@ const isExpanded = computed(() =>
     }
 
     .group-line {
-
         position: absolute;
-        top: 0;
-        bottom: rem(4);
-        left: rem(10);
+        top: 2px;
+        bottom: rem(10);
+        left: rem(34);
         width: rem(8);
         border-left: 1px solid var(--tree-line-color);
 
@@ -182,10 +207,10 @@ const isExpanded = computed(() =>
 
     .group-line-cover {
         position: absolute;
-        top: rem(20);
+        top: rem(12);
         bottom: 0;
-        left: -18px;
-        width: 8px;
+        left: rem(12);
+        width: rem(8);
         border-top: 1px solid var(--tree-line-color);
         background-color: var(--v-slate-900);
     }
@@ -194,6 +219,26 @@ const isExpanded = computed(() =>
         width: rem(24);
         height: rem(24);
         fill: var(--v-slate-500);
+    }
+
+    .sign-empty {
+        height: rem(20);
+        width: rem(20);
+    }
+    .sign-toggle {
+        display: flex;
+        justify-content: center;
+        background-color: var(--v-slate-900);
+
+        &:hover {
+            background-color: #1b2335;
+        }
+    }
+
+    .sign-icon {
+        width: rem(20);
+        height: rem(20);
+        fill: var(--v-slate-600);
     }
 }
 </style>

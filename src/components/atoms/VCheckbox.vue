@@ -28,8 +28,8 @@ defineProps<Props>();
     width: rem(14);
     color: var(--v-yellow-200);
     background-color: transparent;
-    border-color: var(--v-slate-500);
-    border-width: 1px;
+    border-color: var(--v-slate-600);
+    border-width: 2px;
     border-radius: 2px;
 
     &:checked {

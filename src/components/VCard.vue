@@ -3,6 +3,12 @@ import { computed, onMounted } from 'vue';
 import { useNodes } from '@/stores/nodes';
 import ChevronRight from '/public/assets/icons/chevron-right.svg?component';
 import ChevronDown from '/public/assets/icons/chevron-down.svg?component';
+
+import ArrowLeft from '/public/assets/icons/arrow-left.svg?component';
+import ArrowRight from '/public/assets/icons/arrow-right.svg?component';
+import Edit from '/public/assets/icons/edit.svg?component';
+import Gear from '/public/assets/icons/gear.svg?component';
+import Save from '/public/assets/icons/save.svg?component';
 import VNode from './VNode.vue';
 import type { NodeId } from '@/stores/nodes/interfaces';
 
@@ -31,7 +37,20 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
 
 <template>
     <div class="card">
-        <div class="header">{{ props.title }}</div>
+        <div class="header">
+            <div class="header-left">
+                <h3>
+                    {{ props.title }}
+                </h3>
+            </div>
+            <div class="header-right">
+                <ArrowLeft class="sign-icon" />
+                <ArrowRight class="sign-icon" />
+                <Save class="sign-icon" />
+                <Edit class="sign-icon" />
+                <Gear class="sign-icon" />
+            </div>
+        </div>
         <div class="content">
             <div class="line-column">
                 <div
@@ -63,11 +82,11 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
                 <VNode
                     root
                     :node="nodeStore.tree"
-                    :tree-line="false"
+                    :tree-line="true"
                 />
             </div>
         </div>
-        <div class="footer">footer</div>
+        <!-- <div class="footer">footer</div> -->
     </div>
 </template>
 
@@ -75,8 +94,9 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
 .card {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    min-height: 80vh;
+    gap: rem(8);
+    max-height: 100%;
+    min-width: rem(360);
     background-color: var(--v-slate-800);
     padding: rem(8);
     border-radius: rem(8);
@@ -84,12 +104,34 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
     $card: &;
 
     .header {
-        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: rem(4) rem(10);
+
+        &-left {
+            display: flex;
+            align-items: center;
+        }
+
+        &-right {
+            display: flex;
+            align-items: center;
+            column-gap: rem(16);
+        }
+
+        h3 {
+            font-size: rem(16);
+            font-weight: 600;
+            line-height: 120%;
+            text-transform: capitalize;
+            color: var(--v-slate-50);
+        }
     }
 
     .content {
         display: flex;
-        padding-block: rem(16);
+        padding: rem(16) rem(8);
         position: relative;
         flex: 1;
         background-color: var(--v-slate-900);
@@ -101,6 +143,7 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
         height: rem(24);
         line-height: rem(24);
         text-align: center;
+        display: none;
 
         &.hidden {
             display: none;
@@ -119,8 +162,9 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
     }
 
     .sign-icon {
-        width: rem(24);
-        height: rem(24);
+        display: flex;
+        width: rem(20);
+        height: rem(20);
         fill: var(--v-slate-600);
     }
 

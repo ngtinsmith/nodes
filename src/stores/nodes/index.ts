@@ -133,9 +133,20 @@ export const useNodes = defineStore('nodes', () => {
         const parentNode = rawNodes.value.find((node) => node.id === parentId);
 
         parentNode?.children.push(newNode.id);
+
+        nodeStates.value.push({
+            id: newNode.id,
+            complete: false,
+            expanded: false,
+        });
+
+        if (!nodeStateMap.value[parentId].expanded) {
+            nodeStateMap.value[parentId].expanded = true;
+        }
     }
 
     function deleteNode(nodeId: string, parentId?: string) {
+        // TODO: handle node has children
         const parentNode = rawNodes.value.find((node) => node.id === parentId);
 
         if (!parentNode?.children) return;
@@ -145,6 +156,9 @@ export const useNodes = defineStore('nodes', () => {
         );
 
         rawNodes.value = rawNodes.value.filter((node) => node.id !== nodeId);
+        nodeStates.value = nodeStates.value.filter(
+            (node) => node.id !== nodeId,
+        );
     }
 
     function toggleNode(id: string) {

@@ -136,6 +136,7 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
         flex: 1;
         background-color: var(--v-slate-900);
         border-radius: rem(4);
+        overflow: hidden;
     }
 
     .sign {
@@ -172,6 +173,7 @@ const isAncestorVisible = computed(() => (nodeId: NodeId) => {
         display: flex;
         justify-content: flex-start;
         flex: 1;
+        overflow-y: auto;
     }
 
     .footer {

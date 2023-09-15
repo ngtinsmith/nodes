@@ -223,6 +223,7 @@ const isExpanded = computed(() =>
         line-height: rem(16);
         font-size: rem(14);
         color: var(--v-slate-100);
+        white-space: pre;
 
         &.is-checked {
             color: var(--v-slate-500);

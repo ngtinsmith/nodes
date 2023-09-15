@@ -32,12 +32,16 @@ export const useNodes = defineStore('nodes', () => {
     const rootIds = computed(() =>
         nodeStates.value.filter((n) => n.primary).map((n) => n.id),
     );
-    const mappedTree = computed(() => buildTree(rootIds.value, nodeMap.value));
+    const mappedTree = computed(() =>
+        buildTree(rootIds.value, nodeMap.value, nodeStateMap.value),
+    );
     const tree = computed<Node>(() => ({
         id: '0',
         parent_id: null,
         title: 'Root',
         children: mappedTree.value,
+        complete: false,
+        expanded: true,
     }));
 
     const treeRows = computed(() => {

@@ -17,13 +17,13 @@ export interface NodeProperties {
     parent_id: NodeId | null;
 }
 
-export type RawNode = NodeProperties & {
+export interface RawNode extends NodeProperties {
     children: NodeId[];
-};
+}
 
-export type Node = NodeProperties & {
+export interface Node extends NodeProperties, NodeState {
     children: Node[];
-};
+}
 
 export type NodeMap = Record<NodeId, RawNode>;
 export type NodeStatesMap = Record<NodeId, NodeState>;

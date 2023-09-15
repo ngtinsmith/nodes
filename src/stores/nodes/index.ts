@@ -63,11 +63,17 @@ export const useNodes = defineStore('nodes', () => {
     const getState = computed(() => (id: NodeId, state: TNodeState) => {
         const node = nodeStateMap.value[id];
 
-        // If root node
+        // root node
         if (id === '0') return true;
 
         return node[state];
     });
+
+    const focusedNode = ref<NodeId>('');
+
+    function setFocusedNode(id: NodeId) {
+        focusedNode.value = focusedNode.value === id ? '' : id;
+    }
 
     // Returns ancestorIds in "bottom-up" direction
     // @returns { [node.id]: [parent, grand-parent, ..., root-ancestor] }
@@ -198,8 +204,10 @@ export const useNodes = defineStore('nodes', () => {
         nodeStateMap,
         getState,
         nodePath,
+        focusedNode,
 
         // handlers
+        setFocusedNode,
         fetchNodes,
         addIntoNode,
         deleteNode,

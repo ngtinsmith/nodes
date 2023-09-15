@@ -53,11 +53,21 @@ const deleteNode = () => {
 };
 
 const toggleCheck = () => nodeStore.toggleNodeCheck(props.node.id);
+const toggleSubControl = () => {
+    isFocused.value = !isFocused.value;
+    nodeStore.setFocusedNode(props.node.id);
+};
 
 const isChecked = computed(() => nodeStore.getState(props.node.id, 'complete'));
 const isExpanded = computed(() =>
     nodeStore.getState(props.node.id, 'expanded'),
 );
+
+const canHover = computed(() => {
+    if (nodeStore.focusedNode === '') return true;
+
+    return nodeStore.focusedNode === props.node.id;
+});
 </script>
 
 <template>
@@ -73,6 +83,7 @@ const isExpanded = computed(() =>
         <div
             v-show="!root"
             :class="['row', isFocused && 'is-focused']"
+            :data-hover="canHover"
         >
             <div class="content">
                 <div class="row-content">
@@ -121,7 +132,7 @@ const isExpanded = computed(() =>
                     </div>
                     <button
                         class="sub-control"
-                        @click="isFocused = !isFocused"
+                        @click="toggleSubControl"
                     >
                         <Network class="toggle-icon" />
                     </button>
@@ -172,7 +183,7 @@ const isExpanded = computed(() =>
         background-color: transparent;
 
         &.is-focused,
-        &:hover {
+        &[data-hover='true']:hover {
             background-color: var(--v-transparent-white-5);
 
             .sign-toggle {

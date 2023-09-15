@@ -58,11 +58,6 @@ const toggleSubControl = () => {
     nodeStore.setFocusedNode(props.node.id);
 };
 
-const isChecked = computed(() => nodeStore.getState(props.node.id, 'complete'));
-const isExpanded = computed(() =>
-    nodeStore.getState(props.node.id, 'expanded'),
-);
-
 const canHover = computed(() => {
     if (nodeStore.focusedNode === '') return true;
 
@@ -98,7 +93,7 @@ const canHover = computed(() => {
                         @click="nodeStore.toggleNode(node.id)"
                     >
                         <ChevronDown
-                            v-if="nodeStore.getState(node.id, 'expanded')"
+                            v-if="node.expanded"
                             class="sign-icon"
                         />
                         <ChevronRight
@@ -112,7 +107,7 @@ const canHover = computed(() => {
                     />
                     <div class="checkbox-wrapper">
                         <VCheckbox
-                            :checked="isChecked"
+                            :checked="node.complete"
                             @click="toggleCheck"
                         />
                     </div>
@@ -120,7 +115,7 @@ const canHover = computed(() => {
                         :class="[
                             'title',
                             {
-                                'is-checked': isChecked,
+                                'is-checked': node.complete,
                             },
                         ]"
                     >
@@ -159,7 +154,7 @@ const canHover = computed(() => {
         </div>
 
         <div
-            v-show="isExpanded"
+            v-show="node.expanded"
             :class="[
                 'children',
                 {

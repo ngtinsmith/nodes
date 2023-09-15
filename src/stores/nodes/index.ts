@@ -64,15 +64,6 @@ export const useNodes = defineStore('nodes', () => {
         return nodes;
     });
 
-    const getState = computed(() => (id: NodeId, state: TNodeState) => {
-        const node = nodeStateMap.value[id];
-
-        // root node
-        if (id === '0') return true;
-
-        return node[state];
-    });
-
     const focusedNode = ref<NodeId>('');
 
     function setFocusedNode(id: NodeId) {
@@ -206,7 +197,6 @@ export const useNodes = defineStore('nodes', () => {
         // getters
         nodeMap,
         nodeStateMap,
-        getState,
         nodePath,
         focusedNode,
 

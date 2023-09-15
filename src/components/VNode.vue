@@ -157,7 +157,9 @@ const isExpanded = computed(() =>
 
 <style lang="scss" scoped>
 .node {
-    --tree-line-color: var(--v-slate-600);
+    --v-slate-700_70: #{opacify-tw(slate, 700, 0.7)};
+    --v-slate-900-x-white_5: #{mix(color-tw(slate, 900), $white, 95%)};
+    --tree-line-color: var(--v-slate-700_70);
 
     width: 100%;
     background-color: transparent;
@@ -172,7 +174,8 @@ const isExpanded = computed(() =>
             background-color: var(--v-transparent-white-5);
 
             .sign-toggle {
-                background-color: #1b2335;
+                background-color: var(--v-slate-900-x-white_5);
+            }
 
             .row-controls {
                 opacity: 1;
@@ -285,7 +288,7 @@ const isExpanded = computed(() =>
         background-color: var(--v-slate-900);
 
         &:hover {
-            background-color: #1b2335;
+            background-color: var(--v-slate-900-x-white_5);
         }
     }
 

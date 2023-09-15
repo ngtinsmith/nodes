@@ -1,5 +1,19 @@
 @use 'sass:math';
+@use '@/styles/tailwind-colors' as tw;
+
+// Generic
 
 @function rem($pixel) {
     @return math.div($pixel, 16) * 1rem;
 }
+
+// Tailwind Color Utils
+
+@function color-tw($color, $weight) {
+    @return map-get(tw.$colors, $color, $weight);
+}
+
+@function opacify-tw($color, $weight, $opacity) {
+    @return adjust-color(color-tw($color, $weight), $alpha: $opacity - 1);
+}
+

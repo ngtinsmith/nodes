@@ -261,9 +261,11 @@ const isExpanded = computed(() =>
         background-color: var(--v-slate-900);
     }
 
+    $icon-size: 20;
+
     .toggle-icon {
-        width: rem(24);
-        height: rem(24);
+        width: rem($icon-size);
+        height: rem($icon-size);
         fill: var(--v-slate-500);
     }
 
@@ -275,6 +277,7 @@ const isExpanded = computed(() =>
         height: rem(20);
         width: rem(20);
     }
+
     .sign-toggle {
         display: flex;
         justify-content: center;

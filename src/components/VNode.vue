@@ -82,7 +82,12 @@ const canHover = computed(() => {
         />
         <div
             v-show="!root"
-            :class="['row', isFocused && 'is-focused']"
+            :class="[
+                'row',
+                {
+                    'is-focused': isFocused,
+                },
+            ]"
             :data-hover="canHover"
         >
             <div class="content">
@@ -111,7 +116,14 @@ const canHover = computed(() => {
                             @click="toggleCheck"
                         />
                     </div>
-                    <div :class="['title', isChecked && 'is-checked']">
+                    <div
+                        :class="[
+                            'title',
+                            {
+                                'is-checked': isChecked,
+                            },
+                        ]"
+                    >
                         {{ node.title }}
                     </div>
                 </div>
@@ -148,11 +160,21 @@ const canHover = computed(() => {
 
         <div
             v-show="isExpanded"
-            :class="['children', root && 'no-gutter']"
+            :class="[
+                'children',
+                {
+                    'no-gutter': root,
+                },
+            ]"
         >
             <div
                 v-if="treeLine && !root"
-                :class="['group-line', hasChildren && 'bottom-line']"
+                :class="[
+                    'group-line',
+                    {
+                        'bottom-line': hasChildren,
+                    },
+                ]"
             />
             <VNode
                 v-for="(childNode, idx) in node.children"

@@ -161,6 +161,8 @@ const isExpanded = computed(() =>
     --v-slate-900-x-white_5: #{mix(color-tw(slate, 900), $white, 95%)};
     --tree-line-color: var(--v-slate-700_70);
 
+    $icon-size: 20;
+
     width: 100%;
     background-color: transparent;
 
@@ -264,8 +266,6 @@ const isExpanded = computed(() =>
         background-color: var(--v-slate-900);
     }
 
-    $icon-size: 20;
-
     .toggle-icon {
         width: rem($icon-size);
         height: rem($icon-size);
@@ -278,8 +278,8 @@ const isExpanded = computed(() =>
     }
 
     .sign-empty {
-        height: rem(20);
-        width: rem(20);
+        height: rem($icon-size);
+        width: rem($icon-size);
     }
 
     .sign-toggle {
@@ -293,8 +293,8 @@ const isExpanded = computed(() =>
     }
 
     .sign-icon {
-        width: rem(20);
-        height: rem(20);
+        width: rem($icon-size);
+        height: rem($icon-size);
         fill: var(--v-slate-600);
     }
 }

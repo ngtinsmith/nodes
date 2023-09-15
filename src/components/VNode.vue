@@ -270,6 +270,7 @@ const isExpanded = computed(() =>
     }
 
     .checkbox-wrapper {
+        display: flex;
         margin-inline: rem(6) rem(8);
     }
 

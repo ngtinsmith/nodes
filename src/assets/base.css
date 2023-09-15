@@ -32,8 +32,6 @@
 
     --color-heading: var(--vt-c-text-light-1);
     --color-text: var(--vt-c-text-light-1);
-
-    --section-gap: 160px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -48,32 +46,6 @@
         --color-heading: var(--vt-c-text-dark-1);
         --color-text: var(--vt-c-text-dark-2);
     }
-}
-
-/* app variables */
-:root {
-    /* colors */
-    --v-white: #ffffff;
-    --v-black: #000000;
-
-    --v-gray-900: #111827;
-
-    --v-yellow-200: #fef08a;
-    --v-slate-50: #f8fafc;
-    --v-slate-100: #F1F5F9;
-    --v-slate-400: #94A3B8;
-    --v-slate-500: #64748b;
-    --v-slate-600: #475569;
-    --v-slate-800: #1e293b;
-    --v-slate-900: #0f172a;
-    --v-indigo-200: #c7d2fe;
-
-    /* transparent */
-    --v-transparent-white-5: rgba(255, 255, 255, 0.05);
-    --v-transparent-white-10: rgba(255, 255, 255, 0.10);
-    --v-transparent-white-15: rgba(255, 255, 255, 0.15);
-    --v-transparent-white-20: rgba(255, 255, 255, 0.20);
-    --v-transparent-white-25: rgba(255, 255, 255, 0.25);
 }
 
 *,

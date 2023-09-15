@@ -21,6 +21,7 @@ export default defineConfig({
             scss: {
                 additionalData: `
                     @use "src/styles/_helpers.scss" as *;
+                    @use "src/styles/_colors.scss" as *;
                 `,
             },
         },

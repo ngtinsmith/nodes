@@ -1,12 +1,17 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useNodes } from '@/stores/nodes';
 import type { Node } from '@/stores/nodes/interfaces';
-import Add from '/public/assets/icons/add-line.svg?component';
-import Close from '/public/assets/icons/close-line.svg?component';
 import ChevronRight from '/public/assets/icons/chevron-right.svg?component';
 import ChevronDown from '/public/assets/icons/chevron-down.svg?component';
 import VCheckbox from '@/components/atoms/VCheckbox.vue';
+
+import Network from '/public/assets/icons/network.svg?component';
+import AddOutlineBox from '/public/assets/icons/add-outline-box.svg?component';
+import Trash from '/public/assets/icons/trash.svg?component';
+import AddAbove from '/public/assets/icons/add-above.svg?component';
+import AddBelow from '/public/assets/icons/add-below.svg?component';
+import Duplicate from '/public/assets/icons/duplicate.svg?component';
 
 export interface NodeItemProps {
     node: Node;
@@ -21,7 +26,6 @@ const nodeStore = useNodes();
 
 const childrenSize = computed(() => props.node.children.length);
 const hasChildren = computed(() => childrenSize.value > 0);
-
 const hasDanglingLine = computed(() => (childNode: Node, idx: number) => {
     // first
     const isFirstWithChildren =
@@ -35,6 +39,7 @@ const hasDanglingLine = computed(() => (childNode: Node, idx: number) => {
 
     return (isLast && hasManyChildren) || isFirstWithChildren;
 });
+const isFocused = ref(false);
 
 const add = () => {
     nodeStore.addIntoNode({
@@ -67,7 +72,7 @@ const isExpanded = computed(() =>
         />
         <div
             v-show="!root"
-            class="row"
+            :class="['row', isFocused && 'is-focused']"
         >
             <div class="content">
                 <div class="row-content">
@@ -100,11 +105,31 @@ const isExpanded = computed(() =>
                     </div>
                 </div>
                 <div class="row-controls">
+                    <div
+                        v-if="isFocused"
+                        class="sub-control-items"
+                    >
+                        <button>
+                            <AddAbove class="toggle-icon" />
+                        </button>
+                        <button>
+                            <AddBelow class="toggle-icon" />
+                        </button>
+                        <button>
+                            <Duplicate class="toggle-icon" />
+                        </button>
+                    </div>
+                    <button
+                        class="sub-control"
+                        @click="isFocused = !isFocused"
+                    >
+                        <Network class="toggle-icon" />
+                    </button>
                     <button @click="add">
-                        <Add class="toggle-icon" />
+                        <AddOutlineBox class="toggle-icon" />
                     </button>
                     <button @click="deleteNode">
-                        <Close class="toggle-icon" />
+                        <Trash class="toggle-icon" />
                     </button>
                 </div>
             </div>
@@ -139,14 +164,19 @@ const isExpanded = computed(() =>
 
     .row {
         display: flex;
-        padding-inline: 0.25rem;
+        padding: rem(2) rem(4);
         background-color: transparent;
 
+        &.is-focused,
         &:hover {
             background-color: var(--v-transparent-white-5);
 
             .sign-toggle {
                 background-color: #1b2335;
+
+            .row-controls {
+                opacity: 1;
+                pointer-events: all;
             }
         }
     }
@@ -156,14 +186,29 @@ const isExpanded = computed(() =>
         align-items: center;
     }
 
+    $control-gap: 10;
+
     .row-controls {
         display: flex;
         justify-content: flex-end;
+        column-gap: rem($control-gap);
         flex: 1;
         opacity: 0;
+        pointer-events: none;
+    }
 
-        &:hover {
-            opacity: 1;
+    .sub-control {
+        position: relative;
+
+        &-items {
+            display: flex;
+            position: absolute;
+            column-gap: rem($control-gap);
+            right: rem(-12);
+            background-color: #1e293b;
+            bottom: rem(-48);
+            padding: rem(8) rem(12);
+            border-radius: rem(8);
         }
     }
 

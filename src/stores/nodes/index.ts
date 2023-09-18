@@ -115,6 +115,13 @@ export const useNodes = defineStore('nodes', () => {
         nodeStates.value = stateNodeStates;
     }
 
+    const createNode = (parentId: NodeId, title: string): RawNode => ({
+        id: uuidv4(),
+        parent_id: parentId,
+        title,
+        children: [],
+    });
+
     function addIntoNode({
         parentId,
         title,
@@ -122,12 +129,7 @@ export const useNodes = defineStore('nodes', () => {
         parentId: string;
         title: string;
     }) {
-        const newNode: RawNode = {
-            id: uuidv4(),
-            parent_id: parentId,
-            title,
-            children: [],
-        };
+        const newNode: RawNode = createNode(parentId, title);
 
         rawNodes.value.push(newNode);
 
@@ -144,6 +146,37 @@ export const useNodes = defineStore('nodes', () => {
         if (!nodeStateMap.value[parentId].expanded) {
             nodeStateMap.value[parentId].expanded = true;
         }
+    }
+
+    function addNode(
+        parentId: NodeId,
+        id: NodeId,
+        title: string,
+        pos: 'above' | 'below',
+    ) {
+        const newNode: RawNode = createNode(parentId, title);
+        const siblingIds = nodeMap.value[parentId].children;
+        let currentIdx = siblingIds.findIndex((childId) => childId === id);
+
+        if (pos === 'below') {
+            currentIdx += 1;
+        }
+
+        rawNodes.value.push(newNode);
+
+        if (currentIdx === siblingIds.length) {
+            nodeMap.value[parentId].children.push(newNode.id);
+        } else {
+            // newNode is added automatically 'above' unless pos = 'below',
+            // because it takes the position (index) of the reference node
+            nodeMap.value[parentId].children.splice(currentIdx, 0, newNode.id);
+        }
+
+        nodeStates.value.push({
+            id: newNode.id,
+            complete: false,
+            expanded: false,
+        });
     }
 
     function deleteNode(nodeId: string, parentId?: string) {
@@ -204,6 +237,7 @@ export const useNodes = defineStore('nodes', () => {
         setFocusedNode,
         fetchNodes,
         addIntoNode,
+        addNode,
         deleteNode,
         toggleNode,
         toggleNodeCheck,

@@ -14,7 +14,7 @@ export interface NodeState {
 export interface NodeProperties {
     id: NodeId;
     title: string;
-    parent_id: NodeId | null;
+    parent_id: NodeId;
 }
 
 export interface RawNode extends NodeProperties {

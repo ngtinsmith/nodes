@@ -48,6 +48,16 @@ const add = () => {
     });
 };
 
+const addAbove = () => {
+    const title = `Node {above} ${Math.round(Math.random() * 10000)}`;
+    nodeStore.addNode(props.node.parent_id, props.node.id, title, 'above');
+};
+
+const addBelow = () => {
+    const title = `Node {below} ${Math.round(Math.random() * 10000)}`;
+    nodeStore.addNode(props.node.parent_id, props.node.id, title, 'below');
+};
+
 const deleteNode = () => {
     nodeStore.deleteNode(props.node.id, props.parentId);
 };
@@ -128,10 +138,16 @@ const canHover = computed(() => {
                         class="sub-control-items"
                     >
                         <button>
-                            <AddAbove class="toggle-icon" />
+                            <AddAbove
+                                class="toggle-icon"
+                                @click="addAbove"
+                            />
                         </button>
                         <button>
-                            <AddBelow class="toggle-icon" />
+                            <AddBelow
+                                class="toggle-icon"
+                                @click="addBelow"
+                            />
                         </button>
                         <button>
                             <Duplicate class="toggle-icon" />
@@ -242,6 +258,7 @@ const canHover = computed(() => {
             bottom: rem(-48);
             padding: rem(8) rem(12);
             border-radius: rem(8);
+            z-index: 1;
         }
     }
 

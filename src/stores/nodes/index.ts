@@ -1,8 +1,9 @@
-import { ref, computed } from 'vue';
+import { ref, computed, toRaw } from 'vue';
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
 import { createNodeMap } from '@/utils/array';
 import { buildTree } from '@/utils/tree';
+import { getParensMatch, incrementDuplicateCount } from '@/utils/duplicates';
 import type {
     Node,
     NodeId,
@@ -10,7 +11,6 @@ import type {
     NodeState,
     NodeStatesMap,
     RawNode,
-    TNodeState,
 } from './interfaces';
 import { nodes as staticNodes } from './static/nodes';
 import { nodeStates as stateNodeStates } from './static/node-states';
@@ -179,6 +179,55 @@ export const useNodes = defineStore('nodes', () => {
         });
     }
 
+    function duplicateNode(id: NodeId) {
+        // 1 - prepare nodeClone
+        const node = nodeMap.value[id];
+        const parentNode = nodeMap.value[node.parent_id];
+
+        const cloneId = uuidv4();
+        const nodeClone = structuredClone(toRaw(node));
+        const nodeStateClone = structuredClone(toRaw(nodeStateMap.value[id]));
+
+        nodeClone.id = cloneId;
+        nodeStateClone.id = cloneId;
+
+        const { hasBrace, braced, raw } = getParensMatch(nodeClone.title);
+        const siblingTitles = parentNode.children.map(
+            (id) => nodeMap.value[id].title,
+        );
+
+        if (hasBrace) {
+            const newTitle = nodeClone.title.replace(braced, `(${raw + 1})`);
+            nodeClone.title = incrementDuplicateCount(newTitle, siblingTitles);
+        } else {
+            const nextTitle = `${nodeClone.title} (1)`;
+            nodeClone.title = incrementDuplicateCount(nextTitle, siblingTitles);
+        }
+
+        // 2 - insert or splice nodeClone
+        const referenceIndex = parentNode.children.findIndex(
+            (childId) => childId === id,
+        );
+        const cloneIndex = referenceIndex + 1;
+
+        if (cloneIndex === parentNode.children.length) {
+            parentNode.children.push(cloneId);
+        } else {
+            parentNode.children.splice(cloneIndex, 0, cloneId);
+        }
+
+        rawNodes.value.push(nodeClone);
+
+        // TODO: option to preserve reference state
+        nodeStates.value.push({
+            id: cloneId,
+            complete: false,
+            expanded: false,
+        });
+    }
+
+    // TODO: batch create (or queue) duplicated Nodes in server
+
     function deleteNode(nodeId: string, parentId?: string) {
         // TODO: handle node has children
         const parentNode = rawNodes.value.find((node) => node.id === parentId);
@@ -236,10 +285,13 @@ export const useNodes = defineStore('nodes', () => {
         // handlers
         setFocusedNode,
         fetchNodes,
+        toggleNode,
+        toggleNodeCheck,
+
+        // node controls
         addIntoNode,
         addNode,
         deleteNode,
-        toggleNode,
-        toggleNodeCheck,
+        duplicateNode,
     };
 });

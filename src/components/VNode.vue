@@ -41,7 +41,7 @@ const hasDanglingLine = computed(() => (childNode: Node, idx: number) => {
 });
 const isFocused = ref(false);
 
-const add = () => {
+const addInto = () => {
     nodeStore.addIntoNode({
         parentId: props.node.id,
         title: `Node ${Math.round(Math.random() * 10000)}`,
@@ -56,6 +56,10 @@ const addAbove = () => {
 const addBelow = () => {
     const title = `Node {below} ${Math.round(Math.random() * 10000)}`;
     nodeStore.addNode(props.node.parent_id, props.node.id, title, 'below');
+};
+
+const duplicate = () => {
+    nodeStore.duplicateNode(props.node.id);
 };
 
 const deleteNode = () => {
@@ -150,7 +154,10 @@ const canHover = computed(() => {
                             />
                         </button>
                         <button>
-                            <Duplicate class="toggle-icon" />
+                            <Duplicate
+                                class="toggle-icon"
+                                @click="duplicate"
+                            />
                         </button>
                     </div>
                     <button
@@ -159,7 +166,7 @@ const canHover = computed(() => {
                     >
                         <Network class="toggle-icon" />
                     </button>
-                    <button @click="add">
+                    <button @click="addInto">
                         <AddOutlineBox class="toggle-icon" />
                     </button>
                     <button @click="deleteNode">

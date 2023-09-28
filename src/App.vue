@@ -1,29 +1,45 @@
 <script setup lang="ts">
 import VCard from './components/VCard.vue';
 import VCanvas from './layouts/VCanvas.vue';
+import VSidebar from './layouts/Sidebar/VSidebar.vue';
 </script>
 
 <template>
-    <header class="main-header"></header>
     <main>
-        <div class="main-content">
-            <VCanvas>
-                <VCard title="Node Tree A" />
-                <VCard title="Node Tree B" />
-            </VCanvas>
+        <div class="inner">
+            <VSidebar />
+            <div class="workspace">
+                <header class="main-header"></header>
+                <div class="main-content">
+                    <VCanvas>
+                        <VCard title="Node Tree A" />
+                        <VCard title="Node Tree B" />
+                    </VCanvas>
+                </div>
+            </div>
         </div>
     </main>
 </template>
 
 <style lang="scss">
+main {
+    height: 100vh;
+}
+
+.inner {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+.workspace {
+    overflow: hidden;
+}
+
 .main-header {
     height: rem(48);
     margin-inline: auto;
     background-color: var(--v-gray-900);
-}
-
-main {
-    height: calc(100vh - rem(48));
 }
 
 .main-content {
@@ -31,6 +47,12 @@ main {
     align-items: center;
     justify-content: space-between;
     margin-inline: auto;
-    height: 100%;
+    height: calc(100% - rem(48));
+}
+
+svg {
+    width: rem(20);
+    height: rem(20);
+    fill: var(--v-gray-300);
 }
 </style>

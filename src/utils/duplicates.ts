@@ -1,4 +1,7 @@
-import { END_PARENTHESES_PAIR } from "@/constants/regex";
+import {
+    END_PARENTHESES_PAIR,
+    SPACE_END_PARENTHESES_PAIR,
+} from '@/constants/regex';
 
 // Get matching end-parenthesis
 export const getParensMatch = (
@@ -20,10 +23,9 @@ export const getHighestDuplicateNum = (
 ) =>
     siblingTitles.reduce((prev, title) => {
         const strippedTitleParens = nextTitle.replace(
-            ` ${new RegExp(END_PARENTHESES_PAIR).toString()}`,
+            SPACE_END_PARENTHESES_PAIR,
             '',
         );
-
         const SAME_TITLE_WITH_PARENS = `^(?:${strippedTitleParens}) [(]([0-9]+?)[)]$`;
         const PATTERN = new RegExp(SAME_TITLE_WITH_PARENS);
 

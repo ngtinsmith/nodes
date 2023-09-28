@@ -37,7 +37,7 @@ export const useNodes = defineStore('nodes', () => {
     );
     const tree = computed<Node>(() => ({
         id: '0',
-        parent_id: null,
+        parent_id: '',
         title: 'Root',
         children: mappedTree.value,
         complete: false,

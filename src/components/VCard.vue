@@ -8,6 +8,7 @@ import Edit from '/public/assets/icons/edit.svg?component';
 import Gear from '/public/assets/icons/gear.svg?component';
 import Save from '/public/assets/icons/save.svg?component';
 import VNode from './VNode.vue';
+import VProgressOverview from './VProgressOverview.vue';
 
 export interface NodeCollectionProps {
     title: string;
@@ -47,7 +48,12 @@ onMounted(() => {
                 />
             </div>
         </div>
-        <!-- <div class="footer">footer</div> -->
+        <div class="footer">
+            <VProgressOverview
+                :current="10"
+                :total="25"
+            />
+        </div>
     </div>
 </template>
 

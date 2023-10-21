@@ -12,6 +12,7 @@ import Trash from '/public/assets/icons/trash.svg?component';
 import AddAbove from '/public/assets/icons/add-above.svg?component';
 import AddBelow from '/public/assets/icons/add-below.svg?component';
 import Duplicate from '/public/assets/icons/duplicate.svg?component';
+import UnfoldMore from '/public/assets/icons/unfold-more.svg?component';
 
 export interface NodeItemProps {
     node: Node;
@@ -137,6 +138,30 @@ const canHover = computed(() => {
                     </div>
                 </div>
                 <div class="row-controls">
+                    <div class="primary">
+                        <div class="left">
+                            <button class="btn-expand">
+                                <UnfoldMore
+                                    class="toggle-icon"
+                                    @click="duplicate"
+                                />
+                            </button>
+                        </div>
+                        <div class="right">
+                            <button
+                                class="sub-control"
+                                @click="toggleSubControl"
+                            >
+                                <Network class="toggle-icon" />
+                            </button>
+                            <button @click="addInto">
+                                <AddOutlineBox class="toggle-icon" />
+                            </button>
+                            <button @click="deleteNode">
+                                <Trash class="toggle-icon" />
+                            </button>
+                        </div>
+                    </div>
                     <div
                         v-if="isFocused"
                         class="sub-control-items"
@@ -160,18 +185,6 @@ const canHover = computed(() => {
                             />
                         </button>
                     </div>
-                    <button
-                        class="sub-control"
-                        @click="toggleSubControl"
-                    >
-                        <Network class="toggle-icon" />
-                    </button>
-                    <button @click="addInto">
-                        <AddOutlineBox class="toggle-icon" />
-                    </button>
-                    <button @click="deleteNode">
-                        <Trash class="toggle-icon" />
-                    </button>
                 </div>
             </div>
         </div>
@@ -246,11 +259,27 @@ const canHover = computed(() => {
 
     .row-controls {
         display: flex;
-        justify-content: flex-end;
+        justify-content: space-between;
+        align-items: center;
         column-gap: rem($control-gap);
         flex: 1;
+        margin-left: rem(8);
         opacity: 0;
         pointer-events: none;
+
+        .primary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex: 1;
+
+            .left,
+            .right {
+                display: flex;
+                align-items: center;
+                gap: rem(8);
+            }
+        }
     }
 
     .sub-control {
@@ -348,6 +377,12 @@ const canHover = computed(() => {
         width: rem($icon-size);
         height: rem($icon-size);
         fill: var(--v-slate-600);
+    }
+
+    .btn-expand {
+        svg {
+            fill: var(--v-indigo-200);
+        }
     }
 }
 </style>

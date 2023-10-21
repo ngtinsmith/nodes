@@ -4,7 +4,7 @@ import { useNodes } from '@/stores/nodes';
 import type { Node } from '@/stores/nodes/interfaces';
 import ChevronRight from '/public/assets/icons/chevron-right.svg?component';
 import ChevronDown from '/public/assets/icons/chevron-down.svg?component';
-import VCheckbox from '@/components/atoms/VCheckbox.vue';
+import VCheckbox from '@/components/VCheckbox.vue';
 
 import Network from '/public/assets/icons/network.svg?component';
 import AddOutlineBox from '/public/assets/icons/add-outline-box.svg?component';

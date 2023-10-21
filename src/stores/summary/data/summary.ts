@@ -1,0 +1,67 @@
+import type { TSummary } from '../interfaces';
+
+export const summaries: TSummary[] = [
+    {
+        id: '1',
+        title: 'Default',
+        type: 'todo',
+        progressCurrent: 13,
+        progressTotal: 20,
+        pinned: true,
+        locked: true,
+    },
+    {
+        id: '2',
+        title: 'Karabiner',
+        type: 'todo',
+        progressCurrent: 25,
+        progressTotal: 30,
+        pinned: true,
+        locked: true,
+        active: true,
+    },
+    {
+        id: '3',
+        title: 'Dictionary',
+        type: 'todo',
+        progressCurrent: 15,
+        progressTotal: 50,
+        locked: true,
+    },
+    {
+        id: '4',
+        title: 'Paradise Falls',
+        type: 'todo',
+        progressCurrent: 5,
+        progressTotal: 10,
+    },
+    {
+        id: '5',
+        title: 'Group Link',
+        type: 'todo',
+        progressCurrent: 42,
+        progressTotal: 73,
+    },
+    {
+        id: '6',
+        title: 'Artificer',
+        type: 'todo',
+        progressCurrent: 0,
+        progressTotal: 22,
+        locked: true,
+    },
+    {
+        id: '7',
+        title: 'Open Dash',
+        type: 'document',
+        countDocs: 34,
+        countNotes: 70,
+    },
+    {
+        id: '8',
+        title: 'Darmanitan',
+        type: 'document',
+        countDocs: 110,
+        countNotes: 56,
+    },
+];

@@ -54,7 +54,6 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     border-right: 1px solid var(--v-gray-800);
-    flex: 1;
 }
 
 .top {

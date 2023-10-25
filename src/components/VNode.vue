@@ -2,17 +2,10 @@
 import { computed, ref } from 'vue';
 import { useNodes } from '@/stores/nodes';
 import type { Node } from '@/stores/nodes/interfaces';
+import VCheckbox from '@/components/VCheckbox.vue';
+import VNodeControls from './VNodeControls.vue';
 import ChevronRight from '/public/assets/icons/chevron-right.svg?component';
 import ChevronDown from '/public/assets/icons/chevron-down.svg?component';
-import VCheckbox from '@/components/VCheckbox.vue';
-
-import Network from '/public/assets/icons/network.svg?component';
-import AddOutlineBox from '/public/assets/icons/add-outline-box.svg?component';
-import Trash from '/public/assets/icons/trash.svg?component';
-import AddAbove from '/public/assets/icons/add-above.svg?component';
-import AddBelow from '/public/assets/icons/add-below.svg?component';
-import Duplicate from '/public/assets/icons/duplicate.svg?component';
-import UnfoldMore from '/public/assets/icons/unfold-more.svg?component';
 
 export interface NodeItemProps {
     node: Node;
@@ -72,6 +65,9 @@ const toggleSubControl = () => {
     isFocused.value = !isFocused.value;
     nodeStore.setFocusedNode(props.node.id);
 };
+function expandNode() {
+    // expand
+}
 
 const canHover = computed(() => {
     if (nodeStore.focusedNode === '') return true;
@@ -137,54 +133,17 @@ const canHover = computed(() => {
                         {{ node.title }}
                     </div>
                 </div>
-                <div class="row-controls">
-                    <div class="primary">
-                        <div class="left">
-                            <button class="btn-expand">
-                                <UnfoldMore
-                                    class="toggle-icon"
-                                    @click="duplicate"
-                                />
-                            </button>
-                        </div>
-                        <div class="right">
-                            <button
-                                class="sub-control"
-                                @click="toggleSubControl"
-                            >
-                                <Network class="toggle-icon" />
-                            </button>
-                            <button @click="addInto">
-                                <AddOutlineBox class="toggle-icon" />
-                            </button>
-                            <button @click="deleteNode">
-                                <Trash class="toggle-icon" />
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        v-if="isFocused"
-                        class="sub-control-items"
-                    >
-                        <button>
-                            <AddAbove
-                                class="toggle-icon"
-                                @click="addAbove"
-                            />
-                        </button>
-                        <button>
-                            <AddBelow
-                                class="toggle-icon"
-                                @click="addBelow"
-                            />
-                        </button>
-                        <button>
-                            <Duplicate
-                                class="toggle-icon"
-                                @click="duplicate"
-                            />
-                        </button>
-                    </div>
+                <div class="controls">
+                    <VNodeControls
+                        :focused="isFocused"
+                        @toggle="toggleSubControl"
+                        @add-into="addInto"
+                        @delete-node="deleteNode"
+                        @add-above="addAbove"
+                        @add-below="addBelow"
+                        @duplicate="duplicate"
+                        @expand="expandNode"
+                    />
                 </div>
             </div>
         </div>
@@ -230,6 +189,10 @@ const canHover = computed(() => {
     width: 100%;
     background-color: transparent;
 
+    .controls {
+        flex: 1;
+    }
+
     .row {
         display: flex;
         padding: rem(2) rem(4);
@@ -253,49 +216,6 @@ const canHover = computed(() => {
     .row-content {
         display: flex;
         align-items: center;
-    }
-
-    $control-gap: 10;
-
-    .row-controls {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        column-gap: rem($control-gap);
-        flex: 1;
-        margin-left: rem(8);
-        opacity: 0;
-        pointer-events: none;
-
-        .primary {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex: 1;
-
-            .left,
-            .right {
-                display: flex;
-                align-items: center;
-                gap: rem(8);
-            }
-        }
-    }
-
-    .sub-control {
-        position: relative;
-
-        &-items {
-            display: flex;
-            position: absolute;
-            column-gap: rem($control-gap);
-            right: rem(-12);
-            background-color: #1e293b;
-            bottom: rem(-48);
-            padding: rem(8) rem(12);
-            border-radius: rem(8);
-            z-index: 1;
-        }
     }
 
     .content {
@@ -347,12 +267,6 @@ const canHover = computed(() => {
         background-color: var(--v-slate-900);
     }
 
-    .toggle-icon {
-        width: rem($icon-size);
-        height: rem($icon-size);
-        fill: var(--v-slate-500);
-    }
-
     .checkbox-wrapper {
         display: flex;
         margin-inline: rem(6) rem(8);
@@ -377,12 +291,6 @@ const canHover = computed(() => {
         width: rem($icon-size);
         height: rem($icon-size);
         fill: var(--v-slate-600);
-    }
-
-    .btn-expand {
-        svg {
-            fill: var(--v-indigo-200);
-        }
     }
 }
 </style>

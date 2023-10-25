@@ -16,7 +16,10 @@ export interface NodeItemProps {
 }
 
 const props = defineProps<NodeItemProps>();
+
 const nodeStore = useNodes();
+
+const isFocused = ref(false);
 
 const childrenSize = computed(() => props.node.children.length);
 const hasChildren = computed(() => childrenSize.value > 0);
@@ -33,47 +36,49 @@ const hasDanglingLine = computed(() => (childNode: Node, idx: number) => {
 
     return (isLast && hasManyChildren) || isFirstWithChildren;
 });
-const isFocused = ref(false);
-
-const addInto = () => {
-    nodeStore.addIntoNode({
-        parentId: props.node.id,
-        title: `Node ${Math.round(Math.random() * 10000)}`,
-    });
-};
-
-const addAbove = () => {
-    const title = `Node {above} ${Math.round(Math.random() * 10000)}`;
-    nodeStore.addNode(props.node.parent_id, props.node.id, title, 'above');
-};
-
-const addBelow = () => {
-    const title = `Node {below} ${Math.round(Math.random() * 10000)}`;
-    nodeStore.addNode(props.node.parent_id, props.node.id, title, 'below');
-};
-
-const duplicate = () => {
-    nodeStore.duplicateNode(props.node.id);
-};
-
-const deleteNode = () => {
-    nodeStore.deleteNode(props.node.id, props.parentId);
-};
-
-const toggleCheck = () => nodeStore.toggleNodeCheck(props.node.id);
-const toggleSubControl = () => {
-    isFocused.value = !isFocused.value;
-    nodeStore.setFocusedNode(props.node.id);
-};
-function expandNode() {
-    // expand
-}
-
 const canHover = computed(() => {
     if (nodeStore.focusedNode === '') return true;
 
     return nodeStore.focusedNode === props.node.id;
 });
+
+function addInto() {
+    nodeStore.addIntoNode({
+        parentId: props.node.id,
+        title: `Node ${Math.round(Math.random() * 10000)}`,
+    });
+}
+
+function addAbove() {
+    const title = `Node {above} ${Math.round(Math.random() * 10000)}`;
+    nodeStore.addNode(props.node.parent_id, props.node.id, title, 'above');
+}
+
+function addBelow() {
+    const title = `Node {below} ${Math.round(Math.random() * 10000)}`;
+    nodeStore.addNode(props.node.parent_id, props.node.id, title, 'below');
+}
+
+function duplicate() {
+    nodeStore.duplicateNode(props.node.id);
+}
+
+function deleteNode() {
+    nodeStore.deleteNode(props.node.id, props.parentId);
+}
+
+function toggleCheck() {
+    nodeStore.toggleNodeCheck(props.node.id);
+}
+
+function toggleSubControl() {
+    isFocused.value = !isFocused.value;
+    nodeStore.setFocusedNode(props.node.id);
+}
+
+function expandNode() {
+    // expand
+}
 </script>
 
 <template>

@@ -12,7 +12,7 @@ export interface NodeItemProps {
     root?: boolean;
     parentId?: string;
     danglingLine?: boolean;
-    treeLine?: boolean;
+    treeLine?: boolean; // TODO: test provide/inject
 }
 
 const props = defineProps<NodeItemProps>();
@@ -24,14 +24,13 @@ const isFocused = ref(false);
 const childrenSize = computed(() => props.node.children.length);
 const hasChildren = computed(() => childrenSize.value > 0);
 const hasDanglingLine = computed(() => (childNode: Node, idx: number) => {
-    // first
     const isFirstWithChildren =
         idx === 0 &&
         childNode.children.length === 1 &&
         childrenSize.value === 1;
 
-    // last
     const isLast = idx > 0 && idx === props.node.children.length - 1;
+
     const hasManyChildren = childNode.children.length > 0;
 
     return (isLast && hasManyChildren) || isFirstWithChildren;
@@ -102,7 +101,7 @@ function expandNode() {
             :data-hover="canHover"
         >
             <div class="content">
-                <div class="row-content">
+                <div class="details">
                     <button
                         v-if="node.children.length > 0"
                         class="sign-toggle"
@@ -194,10 +193,6 @@ function expandNode() {
     width: 100%;
     background-color: transparent;
 
-    .controls {
-        flex: 1;
-    }
-
     .row {
         display: flex;
         padding: rem(2) rem(4);
@@ -211,16 +206,22 @@ function expandNode() {
                 background-color: var(--v-slate-900-x-white_5);
             }
 
-            .row-controls {
+            .controls {
                 opacity: 1;
                 pointer-events: all;
             }
         }
     }
 
-    .row-content {
+    .details {
         display: flex;
         align-items: center;
+    }
+
+    .controls {
+        flex: 1;
+        opacity: 0;
+        pointer-events: none;
     }
 
     .content {

@@ -23,7 +23,7 @@ defineEmits<{
 </script>
 
 <template>
-    <div class="row-controls">
+    <div class="node-controls">
         <div class="primary">
             <div class="left">
                 <button class="btn-expand" @click="$emit('expand')">
@@ -66,15 +66,12 @@ defineEmits<{
 $control-gap: 10;
 $icon-size: 20;
 
-.row-controls {
+.node-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
     column-gap: rem($control-gap);
-    flex: 1;
     margin-left: rem(8);
-    opacity: 0;
-    pointer-events: none;
 
     svg {
         width: rem($icon-size);
@@ -103,7 +100,7 @@ $icon-size: 20;
     position: absolute;
     column-gap: rem($control-gap);
     right: rem(-12);
-    background-color: #1e293b;
+    background-color: var(--v-slate-800);
     bottom: rem(-48);
     padding: rem(8) rem(12);
     border-radius: rem(8);

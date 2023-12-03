@@ -1,6 +1,6 @@
 <template>
     <div class="canvas">
-        <slot></slot>
+        <slot />
     </div>
 </template>
 

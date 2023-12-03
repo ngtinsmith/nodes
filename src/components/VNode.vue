@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, inject, ref } from 'vue';
 import { useNodes } from '@/stores/nodes';
 import type { Node } from '@/stores/nodes/interfaces';
 import VCheckbox from '@/components/VCheckbox.vue';
 import VNodeControls from './VNodeControls.vue';
 import ChevronRight from '/public/assets/icons/chevron-right.svg?component';
 import ChevronDown from '/public/assets/icons/chevron-down.svg?component';
+import type { NodeModal } from '@/interfaces/modal';
+import { nodeModalKey } from '@/interfaces/symbols';
 
 export interface NodeItemProps {
     node: Node;
@@ -16,6 +18,7 @@ export interface NodeItemProps {
 }
 
 const props = defineProps<NodeItemProps>();
+const nodeModalInject = inject<NodeModal>(nodeModalKey);
 
 const nodeStore = useNodes();
 
@@ -77,6 +80,7 @@ function toggleSubControl() {
 
 function expandNode() {
     // expand
+    nodeModalInject?.expandNodeContent(props.node);
 }
 </script>
 

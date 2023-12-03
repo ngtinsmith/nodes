@@ -1,8 +1,43 @@
 <script setup lang="ts">
+import { provide, ref } from 'vue';
 import VCard from './components/VCard.vue';
 import VCanvas from './layouts/VCanvas.vue';
 import VSidebar from './layouts/Sidebar/VSidebar.vue';
 import VSecondarySidebar from './layouts/Sidebar/VSecondarySidebar.vue';
+import VModal from './components/VModal.vue';
+import type { Node } from '@/stores/nodes/interfaces';
+import type { NodeModal } from './interfaces/modal';
+import { nodeModalKey } from './interfaces/symbols';
+import VNodeContent from './components/VNodeContent.vue';
+
+const mainContentRef = ref<HTMLDivElement | null>(null);
+const isOpenModal = ref(false);
+const isFullscreenModal = ref(false);
+
+provide<NodeModal>(nodeModalKey, {
+    expandNodeContent,
+});
+
+function expandNodeContent(node: Node) {
+    isOpenModal.value = true;
+
+    // TODO: fetch content by id or used node store content
+    console.log(node);
+}
+
+function closeModal() {
+    isOpenModal.value = false;
+
+    exitFullscreen();
+}
+
+function enterFullscreen() {
+    isFullscreenModal.value = true;
+}
+
+function exitFullscreen() {
+    isFullscreenModal.value = false;
+}
 </script>
 
 <template>
@@ -12,11 +47,29 @@ import VSecondarySidebar from './layouts/Sidebar/VSecondarySidebar.vue';
             <VSecondarySidebar />
             <div class="workspace">
                 <header class="main-header"></header>
-                <div class="main-content">
+                <div
+                    ref="mainContentRef"
+                    class="main-content"
+                >
                     <VCanvas>
                         <VCard title="Node Tree A" />
                         <VCard title="Node Tree B" />
                     </VCanvas>
+                    <VModal
+                        v-if="mainContentRef"
+                        :open="isOpenModal"
+                        :to="mainContentRef"
+                        full-height
+                        align="right"
+                        :fullscreen="isFullscreenModal"
+                    >
+                        <VNodeContent
+                            :fullscreen="isFullscreenModal"
+                            @close="closeModal"
+                            @fullscreen="enterFullscreen"
+                            @exit-fullscreen="exitFullscreen"
+                        />
+                    </VModal>
                 </div>
             </div>
         </div>

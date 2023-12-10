@@ -36,13 +36,6 @@ onMounted(() => {
                 :sections="sidebarStore.primaryGroup"
             />
         </div>
-        <div class="bottom">
-            <VSidebarGroup
-                heading="Help"
-                :sections="sidebarStore.bottomGroup"
-                generic
-            />
-        </div>
     </aside>
 </template>
 
@@ -85,9 +78,5 @@ onMounted(() => {
     gap: rem(16);
     padding: rem(16) rem(24);
     overflow-y: auto;
-}
-
-.bottom {
-    padding: rem(16) rem(24);
 }
 </style>

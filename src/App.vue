@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide, ref } from 'vue';
+import { computed, provide, ref } from 'vue';
 import VCard from './components/VCard.vue';
 import VCanvas from './layouts/VCanvas.vue';
 import VSidebar from './layouts/Sidebar/VSidebar.vue';
@@ -21,6 +21,13 @@ const isOpenModal = ref(false);
 const isFullscreenModal = ref(false);
 
 const sidebarStore = useSidebar();
+
+const sidebarConfig = computed(() => {
+    return {
+        attr: sidebarStore.config.stacked ? 'top' : 'left',
+        value: sidebarStore.config.stacked ? 35 : 50,
+    };
+});
 
 function expandNodeContent(node: Node) {
     isOpenModal.value = true;
@@ -48,14 +55,14 @@ function exitFullscreen() {
     <main>
         <VResizable
             direction="horizontal"
-            :left="25"
+            :left="sidebarStore.config.stacked ? 25 : 50"
         >
             <template #top>
                 <VResizable
                     :direction="
                         sidebarStore.config.stacked ? 'vertical' : 'horizontal'
                     "
-                    :top="35"
+                    :[sidebarConfig.attr]="sidebarConfig.value"
                 >
                     <template #top>
                         <VSidebar />

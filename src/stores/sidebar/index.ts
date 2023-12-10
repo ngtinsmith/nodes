@@ -3,7 +3,14 @@ import { defineStore } from 'pinia';
 import type { IGroup } from './interfaces';
 import { bottomGroup as bottom, primaryGroup as primary } from './data/groups';
 
+interface SidebarConfig {
+    stacked: boolean;
+}
+
 export const useSidebar = defineStore('sidebar', () => {
+    const config: SidebarConfig = {
+        stacked: true,
+    };
     const primaryGroup = ref<IGroup[]>([]);
     const bottomGroup = ref<IGroup[]>([]);
 
@@ -12,5 +19,5 @@ export const useSidebar = defineStore('sidebar', () => {
         bottomGroup.value = bottom;
     }
 
-    return { primaryGroup, bottomGroup, fetchGroups };
+    return { config, primaryGroup, bottomGroup, fetchGroups };
 });

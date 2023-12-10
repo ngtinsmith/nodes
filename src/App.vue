@@ -9,14 +9,18 @@ import type { Node } from '@/stores/nodes/interfaces';
 import type { NodeModal } from './interfaces/modal';
 import { nodeModalKey } from './interfaces/symbols';
 import VNodeContent from './components/VNodeContent.vue';
+import { useSidebar } from '@/stores/sidebar';
+import VResizable from '@/layouts/VResizable.vue';
+
+provide<NodeModal>(nodeModalKey, {
+    expandNodeContent,
+});
 
 const mainContentRef = ref<HTMLDivElement | null>(null);
 const isOpenModal = ref(false);
 const isFullscreenModal = ref(false);
 
-provide<NodeModal>(nodeModalKey, {
-    expandNodeContent,
-});
+const sidebarStore = useSidebar();
 
 function expandNodeContent(node: Node) {
     isOpenModal.value = true;
@@ -43,8 +47,21 @@ function exitFullscreen() {
 <template>
     <main>
         <div class="inner">
-            <VSidebar />
-            <VSecondarySidebar />
+            <div
+                :class="[
+                    'sidebars',
+                    { 'is-stacked': sidebarStore.config.stacked },
+                ]"
+            >
+                <VResizable>
+                    <template #top>
+                        <VSidebar />
+                    </template>
+                    <template #bottom>
+                        <VSecondarySidebar />
+                    </template>
+                </VResizable>
+            </div>
             <div class="workspace">
                 <header class="main-header"></header>
                 <div
@@ -85,6 +102,14 @@ main {
     display: flex;
     height: 100%;
     overflow: hidden;
+}
+
+.sidebars {
+    display: flex;
+
+    &.is-stacked {
+        flex-direction: column;
+    }
 }
 
 .workspace {

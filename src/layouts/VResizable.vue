@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, reactive, ref } from 'vue';
 
 interface Props {
     top?: number;
+    left?: number;
+    direction: 'vertical' | 'horizontal';
 }
 
 const props = defineProps<Props>();
@@ -12,13 +14,25 @@ const topRef = ref<HTMLDivElement | null>(null);
 const bottomRef = ref<HTMLDivElement | null>(null);
 const handleRef = ref<HTMLDivElement | null>(null);
 
-const x = ref(0);
-const y = ref(0);
+const defaultTopHeight = props.top ?? 50;
+const defaultLeftWidth = props.left ?? 50;
 
 const dragging = ref(false);
-const defaultTopHeight = props.top ?? 40;
-const topHeight = ref(defaultTopHeight);
-const topHeightRect = ref(0);
+
+const pointer = reactive({
+    x: 0,
+    y: 0,
+});
+
+const blockSize = reactive({
+    width: defaultLeftWidth,
+    height: defaultTopHeight,
+});
+
+const blockRect = reactive({
+    top: 0,
+    left: 0,
+});
 
 const pointerDownHandler = function (e: PointerEvent) {
     if (e.target instanceof HTMLElement) {
@@ -27,20 +41,27 @@ const pointerDownHandler = function (e: PointerEvent) {
 
     dragging.value = true;
 
-    x.value = e.clientX;
-    y.value = e.clientY;
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
 
-    topHeightRect.value = topRef.value?.getBoundingClientRect().height ?? 0;
+    const topRect = topRef.value?.getBoundingClientRect();
+
+    blockRect.top = topRect?.height ?? 0;
+    blockRect.left = topRect?.width ?? 0;
 };
 
 const pointerMoveHandler = function (e: PointerEvent) {
     if (!dragging.value) return;
 
-    const dy = e.clientY - y.value;
-    const bodyHeight = containerRef.value?.getBoundingClientRect().height ?? 0;
-    const newTopHeight = ((topHeightRect.value + dy) * 100) / bodyHeight;
+    const dx = e.clientX - pointer.x;
+    const dy = e.clientY - pointer.y;
 
-    topHeight.value = newTopHeight;
+    const bodyRect = containerRef.value?.getBoundingClientRect();
+    const newTopHeight = ((blockRect.top + dy) * 100) / (bodyRect?.height ?? 0);
+    const newLeftWidth = ((blockRect.left + dx) * 100) / (bodyRect?.width ?? 0);
+
+    blockSize.height = newTopHeight;
+    blockSize.width = newLeftWidth;
 };
 
 const pointerUpHandler = function (e: PointerEvent) {
@@ -51,51 +72,55 @@ const pointerUpHandler = function (e: PointerEvent) {
     dragging.value = false;
 };
 
-const boudleClickHandle = () => {
-    topHeight.value = defaultTopHeight;
+const doubleClickHandle = () => {
+    blockSize.height = defaultTopHeight;
+    blockSize.width = defaultLeftWidth;
 };
 
-onMounted(() => {
-    if (handleRef.value) {
-        handleRef.value.addEventListener('pointermove', pointerMoveHandler);
-        handleRef.value.addEventListener('pointerup', pointerUpHandler);
-    }
-});
-
-onBeforeUnmount(() => {
-    if (handleRef.value) {
-        handleRef.value.removeEventListener('pointermove', pointerMoveHandler);
-        handleRef.value.removeEventListener('pointerup', pointerUpHandler);
-    }
+const blockStyle = computed(() => {
+    return props.direction === 'vertical'
+        ? {
+              first: { height: `${blockSize.height}%` },
+              second: { height: `${100 - blockSize.height}%` },
+          }
+        : {
+              first: { width: `${blockSize.width}%` },
+              second: { width: `${100 - blockSize.width}%` },
+          };
 });
 </script>
 
 <template>
     <div
         ref="containerRef"
-        class="resizable"
+        :class="['resizable', { 'is-stacked': direction === 'vertical' }]"
     >
         <div
             ref="topRef"
             class="top"
-            :style="{ height: `${topHeight}%` }"
+            :style="blockStyle.first"
         >
             <slot name="top" />
         </div>
         <div
             ref="handleRef"
-            class="handle-container"
+            :class="[
+                'handle-container',
+                direction === 'vertical' ? 'row' : 'col',
+            ]"
             @pointerdown="pointerDownHandler"
+            @pointerup="pointerUpHandler"
+            @pointermove="pointerMoveHandler"
         >
             <button
                 class="handle"
-                @dblclick="boudleClickHandle"
+                @dblclick="doubleClickHandle"
             />
         </div>
         <div
             ref="bottomRef"
             class="bottom"
-            :style="{ height: `${100 - topHeight}%` }"
+            :style="blockStyle.second"
         >
             <slot name="bottom" />
         </div>
@@ -104,7 +129,13 @@ onBeforeUnmount(() => {
 
 <style lang="scss" scoped>
 .resizable {
+    display: flex;
+    width: 100%;
     height: 100%;
+
+    &.is-stacked {
+        flex-direction: column;
+    }
 }
 
 .top {
@@ -113,26 +144,45 @@ onBeforeUnmount(() => {
 
 .handle-container {
     position: relative;
-    width: 100%;
-}
 
-.handle {
-    --height: 12px;
+    &.row {
+        width: 100%;
 
-    position: absolute;
-    top: calc((var(--height) / 2) * -1);
-    width: 100%;
-    height: var(--height);
-    background-color: transparent;
-    cursor: row-resize;
-    z-index: 1;
+        .handle {
+            --height: 12px;
 
-    &:hover {
-        background-color: rgba($color: white, $alpha: 0.1);
+            top: calc((var(--height) / 2) * -1);
+            width: 100%;
+            height: var(--height);
+            cursor: row-resize;
+        }
     }
 
-    &:active {
-        background-color: rgba($color: white, $alpha: 0.08);
+    &.col {
+        height: 100%;
+
+        .handle {
+            --width: 12px;
+
+            left: calc((var(--width) / 2) * -1);
+            width: var(--width);
+            height: 100%;
+            cursor: col-resize;
+        }
+    }
+
+    .handle {
+        position: absolute;
+        background-color: transparent;
+        z-index: 1;
+
+        &:hover {
+            background-color: rgba($color: white, $alpha: 0.1);
+        }
+
+        &:active {
+            background-color: rgba($color: white, $alpha: 0.08);
+        }
     }
 }
 </style>

@@ -46,14 +46,17 @@ function exitFullscreen() {
 
 <template>
     <main>
-        <div class="inner">
-            <div
-                :class="[
-                    'sidebars',
-                    { 'is-stacked': sidebarStore.config.stacked },
-                ]"
-            >
-                <VResizable>
+        <VResizable
+            direction="horizontal"
+            :left="25"
+        >
+            <template #top>
+                <VResizable
+                    :direction="
+                        sidebarStore.config.stacked ? 'vertical' : 'horizontal'
+                    "
+                    :top="35"
+                >
                     <template #top>
                         <VSidebar />
                     </template>
@@ -61,35 +64,37 @@ function exitFullscreen() {
                         <VSecondarySidebar />
                     </template>
                 </VResizable>
-            </div>
-            <div class="workspace">
-                <header class="main-header"></header>
-                <div
-                    ref="mainContentRef"
-                    class="main-content"
-                >
-                    <VCanvas>
-                        <VCard title="Node Tree A" />
-                        <VCard title="Node Tree B" />
-                    </VCanvas>
-                    <VModal
-                        v-if="mainContentRef"
-                        :open="isOpenModal"
-                        :to="mainContentRef"
-                        full-height
-                        align="right"
-                        :fullscreen="isFullscreenModal"
+            </template>
+            <template #bottom>
+                <div class="workspace">
+                    <header class="main-header"></header>
+                    <div
+                        ref="mainContentRef"
+                        class="main-content"
                     >
-                        <VNodeContent
+                        <VCanvas>
+                            <VCard title="Node Tree A" />
+                            <VCard title="Node Tree B" />
+                        </VCanvas>
+                        <VModal
+                            v-if="mainContentRef"
+                            :open="isOpenModal"
+                            :to="mainContentRef"
+                            full-height
+                            align="right"
                             :fullscreen="isFullscreenModal"
-                            @close="closeModal"
-                            @fullscreen="enterFullscreen"
-                            @exit-fullscreen="exitFullscreen"
-                        />
-                    </VModal>
+                        >
+                            <VNodeContent
+                                :fullscreen="isFullscreenModal"
+                                @close="closeModal"
+                                @fullscreen="enterFullscreen"
+                                @exit-fullscreen="exitFullscreen"
+                            />
+                        </VModal>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </template>
+        </VResizable>
     </main>
 </template>
 
@@ -113,7 +118,7 @@ main {
 }
 
 .workspace {
-    flex: 1;
+    height: 100%;
     overflow: hidden;
 }
 

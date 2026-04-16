@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue';
+import { computed, onMounted, provide, ref } from 'vue';
 import VCard from './components/VCard.vue';
 import VCanvas from './layouts/VCanvas.vue';
 import VSidebar from './layouts/Sidebar/VSidebar.vue';
@@ -11,6 +11,8 @@ import { nodeModalKey } from './interfaces/symbols';
 import VNodeContent from './components/VNodeContent.vue';
 import { useSidebar } from '@/stores/sidebar';
 import VResizable from '@/layouts/VResizable.vue';
+import { useNodes } from './stores/nodes';
+import { useCards } from './stores/cards';
 
 provide<NodeModal>(nodeModalKey, {
     expandNodeContent,
@@ -25,8 +27,24 @@ const sidebarStore = useSidebar();
 const sidebarConfig = computed(() => {
     return {
         attr: sidebarStore.config.stacked ? 'top' : 'left',
-        value: sidebarStore.config.stacked ? 35 : 50,
+        // value: sidebarStore.config.stacked ? 35 : 50,
+        value: 50,
     };
+});
+
+const nodeStore = useNodes();
+const cardsStore = useCards();
+
+onMounted(async () => {
+    await nodeStore.fetchNodes();
+
+    const tree = nodeStore.tree;
+    const card = {
+        title: 'Node Tree A',
+        node: tree,
+    };
+
+    cardsStore.setCards(Array.from({ length: 3 }).map(() => card));
 });
 
 function expandNodeContent(node: Node) {
@@ -57,7 +75,10 @@ function exitFullscreen() {
             direction="horizontal"
             :left="sidebarStore.config.stacked ? 25 : 50"
         >
-            <template #top>
+            <template
+                v-if="sidebarStore.config.enabled"
+                #top
+            >
                 <VResizable
                     :direction="
                         sidebarStore.config.stacked ? 'vertical' : 'horizontal'
@@ -80,8 +101,13 @@ function exitFullscreen() {
                         class="main-content"
                     >
                         <VCanvas>
-                            <VCard title="Node Tree A" />
-                            <VCard title="Node Tree B" />
+                            <VCard
+                                v-for="(card, i) in cardsStore.cards"
+                                :key="card.id ?? i"
+                                :title="card.title"
+                                :node="card.node"
+                            />
+                            <button class="btn-new-card">new card</button>
                         </VCanvas>
                         <VModal
                             v-if="mainContentRef"
@@ -106,6 +132,12 @@ function exitFullscreen() {
 </template>
 
 <style lang="scss">
+.btn-new-card {
+    color: black;
+    padding: 8px 16px;
+    border: 1px solid;
+}
+
 main {
     height: 100vh;
 }

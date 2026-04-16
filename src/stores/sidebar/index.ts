@@ -5,11 +5,13 @@ import { bottomGroup as bottom, primaryGroup as primary } from './data/groups';
 
 interface SidebarConfig {
     stacked: boolean;
+    enabled: boolean;
 }
 
 export const useSidebar = defineStore('sidebar', () => {
     const config: SidebarConfig = {
         stacked: true,
+        enabled: true,
     };
     const primaryGroup = ref<IGroup[]>([]);
     const bottomGroup = ref<IGroup[]>([]);

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { useNodes } from '@/stores/nodes';
-
 import ArrowLeft from '/public/assets/icons/arrow-left.svg?component';
 import ArrowRight from '/public/assets/icons/arrow-right.svg?component';
 import Edit from '/public/assets/icons/edit.svg?component';
@@ -9,18 +6,14 @@ import Gear from '/public/assets/icons/gear.svg?component';
 import Save from '/public/assets/icons/save.svg?component';
 import VNode from './VNode.vue';
 import VProgressOverview from './VProgressOverview.vue';
+import type { Node } from '@/stores/nodes/interfaces';
 
 export interface NodeCollectionProps {
     title: string;
+    node: Node;
 }
 
 const props = defineProps<NodeCollectionProps>();
-
-const nodeStore = useNodes();
-
-onMounted(() => {
-    nodeStore.fetchNodes();
-});
 </script>
 
 <template>
@@ -43,7 +36,7 @@ onMounted(() => {
             <div class="tree">
                 <VNode
                     root
-                    :node="nodeStore.tree"
+                    :node="node"
                     :tree-line="true"
                 />
             </div>

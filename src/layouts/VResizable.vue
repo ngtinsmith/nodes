@@ -96,8 +96,14 @@ const blockStyle = computed(() => {
         :class="['resizable', { 'is-stacked': direction === 'vertical' }]"
     >
         <div
+            v-if="$slots['top']"
             ref="topRef"
-            class="top"
+            :class="[
+                'top',
+                {
+                    'full-width': !$slots['bottom'],
+                },
+            ]"
             :style="blockStyle.first"
         >
             <slot name="top" />
@@ -119,7 +125,12 @@ const blockStyle = computed(() => {
         </div>
         <div
             ref="bottomRef"
-            class="bottom"
+            :class="[
+                'bottom',
+                {
+                    'full-width': !$slots['top'],
+                },
+            ]"
             :style="blockStyle.second"
         >
             <slot name="bottom" />
@@ -140,6 +151,16 @@ const blockStyle = computed(() => {
 
 .top {
     border-bottom: 1px solid #555;
+
+    &.full-width {
+        flex: 1;
+    }
+}
+
+.bottom {
+    &.full-width {
+        flex: 1;
+    }
 }
 
 .handle-container {

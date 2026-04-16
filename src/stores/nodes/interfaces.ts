@@ -14,7 +14,7 @@ export interface NodeState {
 export interface NodeProperties {
     id: NodeId;
     title: string;
-    parent_id: NodeId;
+    parent_id: NodeId | null;
 }
 
 export interface RawNode extends NodeProperties {
@@ -22,7 +22,7 @@ export interface RawNode extends NodeProperties {
 }
 
 export interface Node extends NodeProperties, NodeState {
-    children: Node[];
+    children?: Node[];
 }
 
 export type NodeMap = Record<NodeId, RawNode>;

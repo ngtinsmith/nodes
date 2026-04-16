@@ -30,7 +30,6 @@ onMounted(() => {
 .v-sidebar-2 {
     display: flex;
     flex-direction: column;
-    min-width: 320px;
     height: 100%;
     background-color: var(--v-gray-900);
 }

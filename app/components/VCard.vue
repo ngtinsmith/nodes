@@ -52,7 +52,7 @@ const props = defineProps<NodeCollectionProps>();
     gap: rem(8);
     max-height: 100%;
     min-width: rem(360);
-    background-color: var(--v-slate-800);
+    background-color: var(--slate-800);
     padding: rem(8);
     border-radius: rem(8);
 
@@ -80,7 +80,7 @@ const props = defineProps<NodeCollectionProps>();
             font-weight: 600;
             line-height: 120%;
             text-transform: capitalize;
-            color: var(--v-slate-50);
+            color: var(--slate-50);
         }
     }
 
@@ -89,7 +89,7 @@ const props = defineProps<NodeCollectionProps>();
         padding: rem(16) rem(8);
         position: relative;
         flex: 1;
-        background-color: var(--v-slate-900);
+        background-color: var(--slate-900);
         border-radius: rem(4);
         overflow: hidden;
     }
@@ -98,7 +98,7 @@ const props = defineProps<NodeCollectionProps>();
         display: flex;
         width: rem(20);
         height: rem(20);
-        fill: var(--v-slate-600);
+        fill: var(--slate-600);
     }
 
     .tree {

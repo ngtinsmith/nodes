@@ -20,14 +20,14 @@ const { context = 'app' } = defineProps<Props>();
 
 <style lang="scss" scoped>
 .search {
-    --field-color: var(--v-gray-500);
+    --field-color: var(--gray-500);
 
     display: flex;
     align-items: center;
     width: 100%;
     height: rem(48);
     padding-inline: rem(24);
-    background-color: var(--v-gray-900);
+    background-color: var(--gray-900);
 
     svg {
         fill: var(--field-color);
@@ -38,7 +38,7 @@ const { context = 'app' } = defineProps<Props>();
         margin-left: rem(8);
         font-size: rem(14);
         background-color: transparent;
-        color: var(--v-white);
+        color: var(--white);
         outline: 0;
 
         &::placeholder {

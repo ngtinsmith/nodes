@@ -164,7 +164,7 @@ main {
 .main-header {
     height: rem(48);
     margin-inline: auto;
-    background-color: var(--v-gray-900);
+    background-color: var(--gray-900);
 }
 
 .main-content {
@@ -178,7 +178,7 @@ main {
 svg {
     width: rem(20);
     height: rem(20);
-    fill: var(--v-gray-300);
+    fill: var(--gray-300);
 }
 
 .visually-hidden {

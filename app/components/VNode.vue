@@ -25,11 +25,12 @@ const isFocused = ref(false);
 const childrenSize = computed(() => props.node.children?.length || 0);
 const hasChildren = computed(() => childrenSize.value > 0);
 const hasDanglingLine = computed(() => (childNode: Node, idx: number) => {
-    const children = childNode.children
+    const children = childNode.children;
 
     const isFirstWithChildren =
         idx === 0 &&
-        childNode.children && childNode.children.length === 1 &&
+        childNode.children &&
+        childNode.children.length === 1 &&
         childrenSize.value === 1;
 
     const isLast = idx > 0 && idx === (props.node.children?.length || 0) - 1;
@@ -194,9 +195,8 @@ function expandNode() {
 @use 'sass:color';
 
 .node {
-    --v-slate-700_70: #{opacify-tw(slate, 700, 0.7)};
-    --v-slate-900-x-white_5: #{color.mix(color-tw(slate, 900), $white, 95%)};
-    --tree-line-color: var(--v-slate-700_70);
+    --hover-bg: color-mix(in srgb, var(--slate-900) 95%, var(--white));
+    --tree-line-color: color-mix(in srgb, var(--slate-700) 70%, transparent);
 
     $icon-size: 20;
 
@@ -210,10 +210,10 @@ function expandNode() {
 
         &.is-focused,
         &[data-hover='true']:hover {
-            background-color: var(--v-transparent-white-5);
+            background-color: var(--transparent-white-5);
 
             .sign-toggle {
-                background-color: var(--v-slate-900-x-white_5);
+                background-color: var(--hover-bg);
             }
 
             .controls {
@@ -244,11 +244,11 @@ function expandNode() {
     .title {
         line-height: rem(16);
         font-size: rem(14);
-        color: var(--v-slate-100);
+        color: var(--slate-100);
         white-space: pre;
 
         &.is-checked {
-            color: var(--v-slate-500);
+            color: var(--slate-500);
         }
     }
 
@@ -280,7 +280,7 @@ function expandNode() {
         left: rem(12);
         width: rem(10);
         border-top: 1px solid var(--tree-line-color);
-        background-color: var(--v-slate-900);
+        background-color: var(--slate-900);
     }
 
     .checkbox-wrapper {
@@ -296,17 +296,17 @@ function expandNode() {
     .sign-toggle {
         display: flex;
         justify-content: center;
-        background-color: var(--v-slate-900);
+        background-color: var(--slate-900);
 
         &:hover {
-            background-color: var(--v-slate-900-x-white_5);
+            background-color: var(--hover-bg);
         }
     }
 
     .sign-icon {
         width: rem($icon-size);
         height: rem($icon-size);
-        fill: var(--v-slate-600);
+        fill: var(--slate-600);
     }
 }
 </style>

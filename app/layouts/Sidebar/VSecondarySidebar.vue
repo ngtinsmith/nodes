@@ -31,7 +31,7 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     height: 100%;
-    background-color: var(--v-gray-900);
+    background-color: var(--gray-900);
 }
 
 .top {

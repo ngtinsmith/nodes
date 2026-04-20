@@ -92,14 +92,14 @@ Quo tandem modo? Ex rebus enim timiditas, non ex vocabulis nascitur. Sedulo, inq
 
 <style lang="scss" scoped>
 .node-content {
-    --border-color: var(--v-gray-100);
-    --locked-color: var(--v-indigo-500);
+    --border-color: var(--gray-100);
+    --locked-color: var(--indigo-500);
 
     display: flex;
     flex-direction: column;
     width: 600px;
     height: 100%;
-    background-color: var(--v-white);
+    background-color: var(--white);
     color: black;
 
     &.fullscreen {
@@ -122,7 +122,7 @@ Quo tandem modo? Ex rebus enim timiditas, non ex vocabulis nascitur. Sedulo, inq
         gap: rem(12);
 
         svg {
-            fill: var(--v-slate-800);
+            fill: var(--slate-800);
         }
     }
 }
@@ -137,14 +137,14 @@ Quo tandem modo? Ex rebus enim timiditas, non ex vocabulis nascitur. Sedulo, inq
     h2 {
         font-size: rem(40);
         font-weight: 700;
-        color: var(--v-slate-900);
+        color: var(--slate-900);
     }
 
     textarea {
         flex: 1;
         width: 100%;
         font-size: rem(18);
-        color: var(--v-slate-900);
+        color: var(--slate-900);
         resize: none;
     }
 }
@@ -154,7 +154,7 @@ Quo tandem modo? Ex rebus enim timiditas, non ex vocabulis nascitur. Sedulo, inq
     justify-content: space-between;
     padding: rem(12) rem(16);
     border-top: 1px solid var(--border-color);
-    color: var(--v-slate-700);
+    color: var(--slate-700);
     font-size: rem(14);
 
     .left {
@@ -170,7 +170,7 @@ Quo tandem modo? Ex rebus enim timiditas, non ex vocabulis nascitur. Sedulo, inq
             align-items: center;
 
             svg {
-                fill: var(--v-slate-500);
+                fill: var(--slate-500);
                 margin-left: rem(4);
             }
         }

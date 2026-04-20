@@ -28,9 +28,9 @@ $size: 14;
     flex-shrink: 0;
     height: rem($size);
     width: rem($size);
-    color: var(--v-yellow-200);
+    color: var(--yellow-200);
     background-color: transparent;
-    border-color: var(--v-slate-600);
+    border-color: var(--slate-600);
     border-width: 2px;
     border-radius: 2px;
 

@@ -43,7 +43,7 @@ const { summary } = defineProps<Props>();
     padding: rem(16) rem(24) rem(16) rem(32);
 
     &.active {
-        background-color: var(--v-transparent-white-5);
+        background-color: var(--transparent-white-5);
 
         &::before {
             content: '';
@@ -51,7 +51,7 @@ const { summary } = defineProps<Props>();
             top: 0;
             left: 0;
             height: 100%;
-            border-left: rem(6) solid var(--v-indigo-300);
+            border-left: rem(6) solid var(--indigo-300);
         }
     }
 }
@@ -62,7 +62,7 @@ const { summary } = defineProps<Props>();
     margin-bottom: rem(8);
 
     .label {
-        --label-color: var(--v-slate-50);
+        --label-color: var(--slate-50);
 
         display: flex;
         align-items: center;
@@ -83,7 +83,7 @@ const { summary } = defineProps<Props>();
         align-items: center;
 
         svg {
-            fill: var(--v-emerald-200);
+            fill: var(--emerald-200);
         }
     }
 }

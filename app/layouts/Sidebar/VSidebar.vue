@@ -41,10 +41,10 @@ onMounted(() => {
 .v-sidebar {
     min-width: 280px;
     height: 100%;
-    background-color: var(--v-gray-900);
+    background-color: var(--gray-900);
     display: flex;
     flex-direction: column;
-    border-right: 1px solid var(--v-gray-800);
+    border-right: 1px solid var(--gray-800);
 }
 
 .top {
@@ -65,7 +65,7 @@ onMounted(() => {
         margin-left: rem(8);
         font-weight: 700;
         text-align: left;
-        color: var(--v-gray-200);
+        color: var(--gray-200);
     }
 }
 

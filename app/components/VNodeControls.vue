@@ -69,7 +69,7 @@ $icon-size: 20;
     svg {
         width: rem($icon-size);
         height: rem($icon-size);
-        fill: var(--v-slate-500);
+        fill: var(--slate-500);
     }
 }
 
@@ -93,7 +93,7 @@ $icon-size: 20;
     position: absolute;
     column-gap: rem($control-gap);
     right: rem(-12);
-    background-color: var(--v-slate-800);
+    background-color: var(--slate-800);
     bottom: rem(-48);
     padding: rem(8) rem(12);
     border-radius: rem(8);
@@ -102,7 +102,7 @@ $icon-size: 20;
 
 .btn-expand {
     svg {
-        fill: var(--v-indigo-200);
+        fill: var(--indigo-200);
     }
 }
 </style>

@@ -45,7 +45,7 @@ defineProps<{
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: var(--v-transparent-black-42);
+    background-color: var(--transparent-black-42);
     display: flex;
 
     &.fullscreen {

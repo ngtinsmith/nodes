@@ -30,19 +30,19 @@ const progressPercentageStyle = computed(() => `${progressPercentage.value}%`);
         width: rem(80);
         height: rem($bg-height);
         border-radius: rem(math.div($bg-height, 2));
-        background-color: var(--v-transparent-white-8);
+        background-color: var(--transparent-white-8);
         overflow: hidden;
     }
 
     .fg {
         width: v-bind(progressPercentageStyle);
         height: 100%;
-        background-color: var(--v-emerald-500);
+        background-color: var(--emerald-500);
     }
 
     span {
         font-size: rem(12);
-        color: var(--v-gray-400);
+        color: var(--gray-400);
     }
 }
 </style>

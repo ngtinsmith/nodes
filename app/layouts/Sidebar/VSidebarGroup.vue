@@ -33,8 +33,8 @@ defineProps<Props>();
 
 <style lang="scss" scoped>
 h3 {
-    --default-color: var(--v-indigo-300);
-    --generic-color: var(--v-white);
+    --default-color: var(--indigo-300);
+    --generic-color: var(--white);
 
     display: flex;
     align-items: center;
@@ -70,17 +70,17 @@ ul {
 li {
     padding: rem(4) rem(12);
     border-radius: rem(4);
-    color: var(--v-gray-300);
+    color: var(--gray-300);
 
     &:hover {
-        background-color: var(--v-transparent-white-5);
+        background-color: var(--transparent-white-5);
     }
 
     &.active {
-        color: var(--v-gray-50);
+        color: var(--gray-50);
         font-weight: 700;
-        background-color: var(--v-transparent-white-5);
-        border-left: 4px solid var(--v-indigo-300);
+        background-color: var(--transparent-white-5);
+        border-left: 4px solid var(--indigo-300);
         border-radius: 0 rem(4) rem(4) 0;
     }
 }

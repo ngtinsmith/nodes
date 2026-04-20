@@ -23,12 +23,12 @@ defineProps<Props>();
     align-items: center;
 
     svg {
-        fill: var(--v-indigo-300);
+        fill: var(--indigo-300);
     }
 
     span {
         font-size: rem(12);
-        color: var(--v-gray-400);
+        color: var(--gray-400);
         margin-left: rem(6);
     }
 }

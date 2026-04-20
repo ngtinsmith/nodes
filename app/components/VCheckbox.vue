@@ -28,10 +28,11 @@ $size: 14;
     flex-shrink: 0;
     height: rem($size);
     width: rem($size);
-    color: var(--yellow-200);
+    color: var(--emerald-300);
     background-color: transparent;
-    border-color: var(--slate-600);
     border-width: 2px;
+    border-style: solid;
+    border-color: var(--slate-600);
     border-radius: 2px;
 
     &:checked {

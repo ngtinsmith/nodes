@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     modules: ['@pinia/nuxt', 'nuxt-svgo'],
     svgo: {
         autoImportPath: false,
+        defaultImport: 'component',
     },
     experimental: {
         // Temporary warning fix, remove in future versions

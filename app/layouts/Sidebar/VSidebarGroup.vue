@@ -15,19 +15,20 @@ defineProps<Props>();
         <h3 :class="{ generic }">
             <ListAlt /><span>{{ heading }}</span>
         </h3>
-        <ul>
-            <li
+        <div class="sections">
+            <button
                 v-for="section in sections"
                 :key="section.id"
-                :class="{
-                    active: section.active,
-                }"
+                :class="[
+                    'section',
+                    {
+                        active: section.active,
+                    },
+                ]"
             >
-                <button>
-                    {{ section.label }}
-                </button>
-            </li>
-        </ul>
+                {{ section.label }}
+            </button>
+        </div>
     </section>
 </template>
 
@@ -38,7 +39,7 @@ h3 {
 
     display: flex;
     align-items: center;
-    margin-bottom: rem(8);
+    margin-bottom: rem(16);
 
     &.generic {
         svg {
@@ -61,16 +62,19 @@ h3 {
     }
 }
 
-ul {
+.sections {
     display: flex;
     flex-direction: column;
-    gap: rem(2);
+    gap: rem(4);
 }
 
-li {
+.section {
     padding: rem(4) rem(12);
     border-radius: rem(4);
     color: var(--gray-300);
+    font-size: rem(14);
+    line-height: 1.2;
+    border-left: 4px solid transparent;
 
     &:hover {
         background-color: var(--transparent-white-5);

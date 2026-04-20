@@ -73,7 +73,7 @@ function exitFullscreen() {
     <main>
         <VResizable
             direction="horizontal"
-            :left="sidebarStore.config.stacked ? 25 : 50"
+            :left="sidebarStore.config.stacked ? 25 : 40"
         >
             <template
                 v-if="sidebarStore.config.enabled"

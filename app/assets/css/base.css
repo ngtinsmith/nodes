@@ -26,12 +26,13 @@
     --vt-c-text-dark-1: var(--white);
     --vt-c-text-dark-2: rgba(235, 235, 235, 0.64);
 
-    /* From Tailwind color pallete */
+    /* From Tailwind color palette */
     --gray-50: #f9fafb;
     --slate-50: #f8fafc;
     --gray-100: #f3f4f6;
     --slate-100: #f1f5f9;
     --emerald-200: #a7f3d0;
+    --emerald-300: #86efac;
     --indigo-200: #c7d2fe;
     --yellow-200: #fef08a;
     --gray-200: #e5e7eb;
@@ -116,8 +117,21 @@ body {
 button {
     background-color: unset;
     border: 0;
+    cursor: pointer;
 }
 
 input {
     border: 0;
+}
+
+ul {
+    padding: 0;
+}
+
+li {
+    list-style-type: none;
+}
+
+.nuxt-icon {
+    margin: 0;
 }

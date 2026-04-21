@@ -1,10 +1,6 @@
 <script lang="ts" setup>
-interface Props {
-    checked: boolean;
-    onClick: () => void;
-}
-
-defineProps<Props>();
+defineProps<{ checked: boolean }>();
+defineEmits<{ click: [] }>();
 </script>
 
 <template>
@@ -12,7 +8,7 @@ defineProps<Props>();
         class="v-checkbox"
         type="checkbox"
         :checked="checked"
-        @click="onClick"
+        @click.prevent="$emit('click')"
     />
 </template>
 
@@ -34,6 +30,7 @@ $size: 14;
     border-style: solid;
     border-color: var(--slate-600);
     border-radius: 2px;
+    cursor: pointer;
 
     &:checked {
         border-color: transparent;

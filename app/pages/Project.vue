@@ -36,15 +36,12 @@ const nodeStore = useNodes();
 const cardsStore = useCards();
 
 onMounted(async () => {
+    // TODO: load within <Card /> on int
     await nodeStore.fetchNodes();
 
-    const tree = nodeStore.tree;
-    const card = {
-        title: 'Node Tree A',
-        node: tree,
-    };
-
-    cardsStore.setCards(Array.from({ length: 3 }).map(() => card));
+    cardsStore.setCards(
+        Array.from({ length: 3 }).map(() => ({ title: 'Node Tree A' })),
+    );
 });
 
 function expandNodeContent(node: Node) {
@@ -105,7 +102,7 @@ function exitFullscreen() {
                                 v-for="(card, i) in cardsStore.cards"
                                 :key="card.id ?? i"
                                 :title="card.title"
-                                :node="card.node"
+                                :node="nodeStore.tree"
                             />
                             <button class="btn-new-card">new card</button>
                         </VCanvas>

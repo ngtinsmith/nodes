@@ -71,7 +71,7 @@ function duplicate() {
 }
 
 function deleteNode() {
-    nodeStore.deleteNode(props.node.id, props.parentId);
+    nodeStore.deleteNode(props.node.id);
 }
 
 function toggleCheck() {
@@ -192,8 +192,6 @@ function expandNode() {
 </template>
 
 <style lang="scss" scoped>
-@use 'sass:color';
-
 .node {
     --hover-bg: color-mix(in srgb, var(--slate-900) 95%, var(--white));
     --tree-line-color: color-mix(in srgb, var(--slate-700) 70%, transparent);

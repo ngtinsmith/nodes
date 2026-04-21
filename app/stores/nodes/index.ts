@@ -45,7 +45,12 @@ export const useNodes = defineStore('nodes', () => {
         nodeStates.value.filter((n) => n.primary).map((n) => n.id),
     );
     const mappedTree = computed(() =>
-        buildTree(rootIds.value, nodeMap.value, nodeStateMap.value, parentMap.value),
+        buildTree(
+            rootIds.value,
+            nodeMap.value,
+            nodeStateMap.value,
+            parentMap.value,
+        ),
     );
     const tree = computed<Node>(() => ({
         id: '0',
@@ -136,12 +141,12 @@ export const useNodes = defineStore('nodes', () => {
         title: string;
     }) {
         const newNode: RawNode = createNode(title);
-
-        rawNodes.value.push(newNode);
-
         const parentNode = rawNodes.value.find((node) => node.id === parentId);
 
-        parentNode?.children.push(newNode.id);
+        if (!parentNode) return;
+
+        parentNode.children.push(newNode.id);
+        rawNodes.value.push(newNode);
 
         nodeStates.value.push({
             id: newNode.id,
@@ -149,8 +154,9 @@ export const useNodes = defineStore('nodes', () => {
             expanded: false,
         });
 
-        if (!nodeStateMap.value[parentId].expanded) {
-            nodeStateMap.value[parentId].expanded = true;
+        const parentState = nodeStates.value.find((s) => s.id === parentId);
+        if (parentState && !parentState.expanded) {
+            parentState.expanded = true;
         }
     }
 
@@ -161,22 +167,24 @@ export const useNodes = defineStore('nodes', () => {
         pos: 'above' | 'below',
     ) {
         const newNode: RawNode = createNode(title);
-        const siblingIds = nodeMap.value[parentId].children;
+        const parentNode = rawNodes.value.find((node) => node.id === parentId);
+
+        if (!parentNode) return;
+
+        const siblingIds = parentNode.children;
         let currentIdx = siblingIds.findIndex((childId) => childId === id);
 
         if (pos === 'below') {
             currentIdx += 1;
         }
 
-        rawNodes.value.push(newNode);
-
         if (currentIdx === siblingIds.length) {
-            nodeMap.value[parentId].children.push(newNode.id);
+            parentNode.children.push(newNode.id);
         } else {
-            // newNode is added automatically 'above' unless pos = 'below',
-            // because it takes the position (index) of the reference node
-            nodeMap.value[parentId].children.splice(currentIdx, 0, newNode.id);
+            parentNode.children.splice(currentIdx, 0, newNode.id);
         }
+
+        rawNodes.value.push(newNode);
 
         nodeStates.value.push({
             id: newNode.id,
@@ -189,20 +197,26 @@ export const useNodes = defineStore('nodes', () => {
         // 1 - prepare nodeClone
         const node = nodeMap.value[id];
         const parentId = parentMap.value[id];
-        if (!parentId) return;
+        const nodeState = nodeStateMap.value[id];
+
+        if (!parentId || !node || !nodeState) return;
+
         const parentNode = nodeMap.value[parentId];
+
+        if (!parentNode) return;
 
         const cloneId = uuidv4();
         const nodeClone = structuredClone(toRaw(node));
-        const nodeStateClone = structuredClone(toRaw(nodeStateMap.value[id]));
+        const nodeStateClone = structuredClone(toRaw(nodeState));
 
         nodeClone.id = cloneId;
         nodeStateClone.id = cloneId;
 
         const { hasBrace, braced, raw } = getParensMatch(nodeClone.title);
-        const siblingTitles = parentNode.children.map(
-            (id) => nodeMap.value[id].title,
-        );
+        const siblingTitles =
+            parentNode?.children
+                .map((id) => nodeMap.value[id]?.title || '')
+                .filter(Boolean) ?? [];
 
         if (hasBrace) {
             const newTitle = nodeClone.title.replace(braced, `(${raw + 1})`);
@@ -236,20 +250,19 @@ export const useNodes = defineStore('nodes', () => {
 
     // TODO: batch create (or queue) duplicated Nodes in server
 
-    function deleteNode(nodeId: string, parentId?: string) {
+    function deleteNode(nodeId: string) {
         // TODO: handle node has children
+        const parentId = parentMap.value[nodeId];
         const parentNode = rawNodes.value.find((node) => node.id === parentId);
 
-        if (!parentNode?.children) return;
+        if (!parentNode) return;
 
         parentNode.children = parentNode.children.filter(
             (childId) => childId !== nodeId,
         );
 
         rawNodes.value = rawNodes.value.filter((node) => node.id !== nodeId);
-        nodeStates.value = nodeStates.value.filter(
-            (node) => node.id !== nodeId,
-        );
+        nodeStates.value = nodeStates.value.filter((s) => s.id !== nodeId);
     }
 
     function toggleNode(id: string) {

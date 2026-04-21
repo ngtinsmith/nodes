@@ -3,7 +3,7 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     css: ['~/assets/css/base.css'],
     devtools: { enabled: true },
-    modules: ['@pinia/nuxt', 'nuxt-svgo'],
+    modules: ['@pinia/nuxt', 'nuxt-svgo', '@nuxt/eslint'],
     svgo: {
         autoImportPath: false,
         defaultImport: 'component',
@@ -33,3 +33,4 @@ export default defineNuxtConfig({
         },
     },
 });
+

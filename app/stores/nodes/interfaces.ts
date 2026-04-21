@@ -22,7 +22,7 @@ export interface RawNode extends NodeProperties {
 
 export interface Node extends NodeProperties, NodeState {
     parent_id: NodeId | null;
-    children?: Node[];
+    children: Node[];
 }
 
 export type NodeMap = Record<NodeId, RawNode>;

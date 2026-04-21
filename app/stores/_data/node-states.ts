@@ -1,4 +1,4 @@
-import { NodeState } from '../nodes/interfaces';
+import type { NodeState } from '../nodes/interfaces';
 
 export const nodeStates: NodeState[] = [
     {

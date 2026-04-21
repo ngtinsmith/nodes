@@ -2,7 +2,6 @@ import type {
     Node,
     NodeId,
     NodeMap,
-    NodeState,
     NodeStatesMap,
     RawNode,
 } from '@/stores/nodes/interfaces';
@@ -19,18 +18,26 @@ export const buildTree = (
     nodeStatesMap: NodeStatesMap,
     parentMap: Record<NodeId, NodeId | null>,
 ): Node[] => {
-    return nodeIds.map((id) => {
-        const node: RawNode = nodeMap[id];
-        const states: NodeState = nodeStatesMap[id];
-        const mappedNode: Node = {
-            ...node,
-            ...states,
-            parent_id: parentMap[id] ?? null,
-            children: hasChildren(node)
-                ? buildTree(node.children, nodeMap, nodeStatesMap, parentMap)
-                : [],
-        };
+    return nodeIds
+        .map((id) => {
+            const node = nodeMap[id];
+            const states = nodeStatesMap[id];
 
-        return mappedNode;
-    });
+            if (!node || !states) return;
+
+            return {
+                ...node,
+                ...states,
+                parent_id: parentMap[id] ?? null,
+                children: hasChildren(node)
+                    ? buildTree(
+                          node?.children ?? [],
+                          nodeMap,
+                          nodeStatesMap,
+                          parentMap,
+                      )
+                    : [],
+            };
+        })
+        .filter((node) => node !== undefined);
 };

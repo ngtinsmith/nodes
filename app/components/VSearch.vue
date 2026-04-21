@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-
 interface Props {
     context?: string;
 }
@@ -10,11 +9,23 @@ const { context = 'app' } = defineProps<Props>();
 <template>
     <div class="search">
         <Search />
-        <label id="search-label" class="visually-hidden" for="search-input">
+        <label
+            id="search-label"
+            class="visually-hidden"
+            for="search-input"
+        >
             Search {{ context }}
         </label>
-        <input id="search-input" type="search" role="combobox" aria-autocomplete="list" aria-labelledby="search-label"
-            autocomplete="off" placeholder="Search" />
+        <div></div>
+        <input
+            id="search-input"
+            type="search"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-labelledby="search-label"
+            autocomplete="off"
+            placeholder="Search"
+        />
     </div>
 </template>
 

@@ -10,7 +10,7 @@ interface SidebarConfig {
 
 export const useSidebar = defineStore('sidebar', () => {
     const config: SidebarConfig = {
-        stacked: false,
+        stacked: true,
         enabled: true,
     };
     const primaryGroup = ref<IGroup[]>([]);

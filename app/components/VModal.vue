@@ -19,7 +19,7 @@ defineProps<{
                 {
                     [`align-${align}`]: align,
                     [`position-${position}`]: position,
-                    'fullscreen': fullscreen,
+                    fullscreen: fullscreen,
                 },
             ]"
         >

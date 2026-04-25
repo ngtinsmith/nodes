@@ -1,16 +1,12 @@
-import type { Tag } from "../tags";
+import type { Tag } from '../tags';
 
 export const tags: Tag[] = [
     {
         id: '1',
-        name: 'Utilities'
+        title: 'Personal',
     },
     {
         id: '2',
-        name: 'Renovations'
+        title: 'Professional',
     },
-    {
-        id: '3',
-        name: 'Savings'
-    },
-]
+];

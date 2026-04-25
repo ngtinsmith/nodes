@@ -1,13 +1,23 @@
 <script setup lang="ts">
-import { onMounted } from 'vue';
-import { useSidebar } from '@/stores/sidebar';
-import VSidebarGroup from './VSidebarGroup.vue';
+import type { IGroup } from '~/stores/sidebar/interfaces';
+import VSidebarGroup, { type SidebarGroupProps } from './VSidebarGroup.vue';
+import { useSections } from '~/stores/sections';
 
-const sidebarStore = useSidebar();
+const sectionsStore = useSections();
 
-onMounted(() => {
-    sidebarStore.fetchGroups();
-});
+const sidebarGroups = computed(() =>
+    sectionsStore.sectionGroups.map<SidebarGroupProps>((group, i) => {
+        return {
+            id: group.tag?.id || i,
+            heading: group.tag?.title || 'Section Group',
+            sections: group.sections.map<IGroup>((section) => ({
+                id: section.id,
+                active: section.active,
+                label: section.title,
+            })),
+        };
+    }),
+);
 </script>
 
 <template>
@@ -21,17 +31,10 @@ onMounted(() => {
         </div>
         <div class="content">
             <VSidebarGroup
-                heading="Section Groups A"
-                :sections="
-                    sidebarStore.primaryGroup.map((s, i) => ({
-                        ...s,
-                        active: i === 2,
-                    }))
-                "
-            />
-            <VSidebarGroup
-                heading="Section Groups B"
-                :sections="sidebarStore.primaryGroup"
+                v-for="(group, i) in sidebarGroups"
+                :key="i"
+                :heading="group.heading"
+                :sections="group.sections"
             />
         </div>
     </aside>

@@ -1,17 +1,16 @@
-import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { defineStore } from 'pinia';
 import type { Board } from './interfaces';
+import { boards as boardEntries } from '../_data/boards';
 
 export const useBoards = defineStore('boards', () => {
-    // State
-    const cards = ref<Board[]>([]);
+    const boards = ref<Board[]>([]);
 
-    // Getters
-
-    // Actions
-    function setBoards() {
-        cards.value = [];
+    async function fetchBoards(projectId: string) {
+        boards.value = boardEntries.filter(
+            (board) => board.project_id === projectId,
+        );
     }
 
-    return { cards, setBoards };
+    return { boards, fetchBoards };
 });

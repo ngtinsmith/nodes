@@ -1,33 +1,28 @@
 <script setup lang="ts">
-import VGroupItem from '@/components/VGroupItem.vue';
-import VSearch from '@/components/VSearch.vue';
-import { useSummary } from '@/stores/summary';
-import { onMounted } from 'vue';
+import VBoard from '~/components/VBoard.vue';
+import VSearch from '~/components/VSearch.vue';
+import { useBoards } from '~/stores/boards';
 
-const summaryStore = useSummary();
-
-onMounted(() => {
-    summaryStore.fetchSummary();
-});
+const boardStore = useBoards();
 </script>
 
 <template>
-    <div class="v-sidebar-2">
+    <div class="board">
         <div class="top">
             <VSearch context="group" />
         </div>
         <div class="views">
-            <VGroupItem
-                v-for="summary in summaryStore.summaries"
-                :key="summary.id"
-                :summary="summary"
+            <VBoard
+                v-for="board in boardStore.boards"
+                :key="board.id"
+                :board="board"
             />
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.v-sidebar-2 {
+.board {
     display: flex;
     flex-direction: column;
     height: 100%;

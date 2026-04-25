@@ -1,44 +1,43 @@
 <script setup lang="ts">
-// TODO: better name
-import type { TSummary } from '@/stores/summary/interfaces';
 import VProgressOverview from './VProgressOverview.vue';
 import VDocumentOverview from './VDocumentOverview.vue';
+import type { Board } from '~/stores/boards/interfaces';
 
 interface Props {
-    summary: TSummary;
+    board: Board;
 }
 
-const { summary } = defineProps<Props>();
+const { board } = defineProps<Props>();
 </script>
 
 <template>
-    <div :class="['v-group-item', { active: summary.active }]">
+    <div :class="['group', { active: board.active }]">
         <div class="top">
             <div class="label">
-                <Locked v-if="summary.locked" />
-                <span>{{ summary.title }}</span>
+                <Locked v-if="board.locked" />
+                <span>{{ board.title }}</span>
             </div>
             <div class="flags">
-                <Pinned v-if="summary.pinned" />
+                <Pinned v-if="board.pinned" />
             </div>
         </div>
         <div class="bottom">
             <VProgressOverview
-                v-if="summary.type === 'todo'"
-                :current="summary.progressCurrent"
-                :total="summary.progressTotal"
+                v-if="board.type === 'todo'"
+                :current="board.progressCurrent"
+                :total="board.progressTotal"
             />
             <VDocumentOverview
-                v-if="summary.type === 'document'"
-                :documents="summary.countDocs"
-                :notes="summary.countNotes"
+                v-if="board.type === 'document'"
+                :documents="board.countDocs"
+                :notes="board.countNotes"
             />
         </div>
     </div>
 </template>
 
 <style lang="scss" scoped>
-.v-group-item {
+.group {
     position: relative;
     padding: rem(16) rem(24) rem(16) rem(32);
 

@@ -2,17 +2,17 @@
 import { computed, onMounted, provide, ref } from 'vue';
 import VCard from '~/components/VCard.vue';
 import VCanvas from '~/layouts/VCanvas.vue';
-import VSidebar from '~/layouts/Sidebar/VSidebar.vue';
-import VSecondarySidebar from '~/layouts/Sidebar/VSecondarySidebar.vue';
+import VProjectSections from '~/layouts/Sidebar/VProjectSections.vue';
+import VBoards from '~/layouts/Sidebar/VBoards.vue';
 import VModal from '~/components/VModal.vue';
-import type { Node } from '@/stores/nodes/interfaces';
+import type { Node } from '~/stores/nodes/interfaces';
 import type { NodeModal } from '~/types/modal';
 import { nodeModalKey } from '~/types/symbols';
 import VNodeContent from '~/components/VNodeContent.vue';
-import { useSidebar } from '@/stores/sidebar';
-import VResizable from '@/layouts/VResizable.vue';
-import { useNodes } from '~/stores/nodes';
+import { useSidebar } from '~/stores/sidebar';
+import VResizable from '~/layouts/VResizable.vue';
 import { useCards } from '~/stores/cards';
+import { useProjects } from '~/stores/projects';
 
 provide<NodeModal>(nodeModalKey, {
     expandNodeContent,
@@ -32,16 +32,11 @@ const sidebarConfig = computed(() => {
     };
 });
 
-const nodeStore = useNodes();
+const projectsStore = useProjects();
 const cardsStore = useCards();
 
 onMounted(async () => {
-    // TODO: load within <Card /> on int
-    await nodeStore.fetchNodes();
-
-    cardsStore.setCards(
-        Array.from({ length: 3 }).map(() => ({ title: 'Node Tree A' })),
-    );
+    await projectsStore.loadProjects();
 });
 
 function expandNodeContent(node: Node) {
@@ -83,10 +78,10 @@ function exitFullscreen() {
                     :[sidebarConfig.attr]="sidebarConfig.value"
                 >
                     <template #top>
-                        <VSidebar />
+                        <VProjectSections />
                     </template>
                     <template #bottom>
-                        <VSecondarySidebar />
+                        <VBoards />
                     </template>
                 </VResizable>
             </template>
@@ -99,10 +94,11 @@ function exitFullscreen() {
                     >
                         <VCanvas>
                             <VCard
-                                v-for="(card, i) in cardsStore.cards"
+                                v-for="(card, i) in cardsStore.mappedCards"
+                                :id="card.id"
                                 :key="card.id ?? i"
                                 :title="card.title"
-                                :node="nodeStore.tree"
+                                :node="card.tree"
                             />
                             <button class="btn-new-card">new card</button>
                         </VCanvas>

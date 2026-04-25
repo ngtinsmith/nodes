@@ -1,134 +1,246 @@
-import type { RawNode } from '../interfaces';
+import type { RawNode } from '../nodes/interfaces';
 
 export const nodes: RawNode[] = [
+    // 1st card root
+    {
+        id: '0',
+        title: 'ROOT',
+        parent_id: '-1',
+        project_id: '1',
+    },
     {
         id: '1',
         title: 'Node In-Progress',
-        children: ['2', '3', '4', '01'],
+        parent_id: '0',
+        project_id: '1',
     },
     {
         id: '01',
         title: 'Node In-Progress - 01',
-        children: ['011'],
+        parent_id: '2',
+        project_id: '1',
     },
     {
         id: '011',
         title: 'Node 011',
-        children: [],
+        parent_id: '01',
+        project_id: '1',
     },
     {
         id: '2',
         title: 'Node 2',
-        children: ['22', '222', '2222', '22222'],
+        parent_id: '0',
+        project_id: '1',
     },
     {
         id: '22',
         title: 'Node 22',
-        children: [],
+        parent_id: '2',
+        project_id: '1',
     },
     {
         id: '222',
         title: 'Node 222',
-        children: [],
+        parent_id: '2',
+        project_id: '1',
     },
     {
         id: '2222',
         title: 'Node 2222',
-        children: ['2222.1'],
+        parent_id: '2',
+        project_id: '1',
     },
     {
         id: '2222.1',
         title: 'Node 2222.1',
-        children: [],
+        parent_id: '2222',
+        project_id: '1',
     },
     {
         id: '22222',
         title: 'Node 22222',
-        children: [],
+        parent_id: '2',
+        project_id: '1',
     },
     {
         id: '3',
         title: 'Node 3',
-        children: ['33', '333'],
+        parent_id: '2',
+        project_id: '1',
     },
     {
         id: '33',
         title: 'Node 33',
-        children: [],
+        parent_id: '3',
+        project_id: '1',
     },
     {
         id: '333',
         title: 'Node 333',
-        children: ['3333', '333.1'],
+        parent_id: '3',
+        project_id: '1',
     },
     {
         id: '333.1',
         title: 'Node 333.1',
-        children: [],
+        parent_id: '333',
+        project_id: '1',
     },
     {
         id: '3333',
         title: 'Node 3333',
-        children: [],
+        parent_id: '333',
+        project_id: '1',
     },
     {
         id: '4',
         title: 'Node 4',
-        children: []
+        parent_id: '2',
+        project_id: '1',
     },
     {
         id: '5',
         title: 'Node 5',
-        children: ['6', '8'],
+        parent_id: '0',
+        project_id: '1',
     },
     {
         id: '6',
         title: 'Node 6',
-        children: ['7'],
+        parent_id: '5',
+        project_id: '1',
     },
     {
         id: '7',
         title: 'Node 7',
-        children: [],
+        parent_id: '6',
+        project_id: '1',
     },
-    // {
-    //     id: '77',
-    //     title: 'Node 77',
-    //     children: ['777']
-    // },
-    // {
-    //     id: '777',
-    //     title: 'Node 777',
-    //     children: []
-    // },
     {
         id: '8',
         title: 'Node 8',
-        children: [],
+        parent_id: '5',
+        project_id: '1',
     },
-    // {
-    //     id: '9',
-    //     title: 'Node 9090',
-    //     children: [],
-    // },
-    // {
-    //     id: '10',
-    //     title: 'Node 10',
-    //     children: [],
-    // },
-    // {
-    //     id: '11',
-    //     title: 'Node 11',
-    //     children: ['111', '1111'],
-    // },
-    // {
-    //     id: '111',
-    //     title: 'Node 11',
-    //     children: []
-    // },
-    // {
-    //     id: '1111',
-    //     title: 'Node 11',
-    //     children: []
-    // }
+    // 2nd card root
+    {
+        id: '100',
+        title: 'ROOT',
+        parent_id: 'a',
+        project_id: '1',
+    },
+    {
+        id: '101',
+        title: 'Node Alpha',
+        parent_id: '100',
+        project_id: '1',
+    },
+    {
+        id: '102',
+        title: 'Node Beta',
+        parent_id: '100',
+        project_id: '1',
+    },
+    {
+        id: '103',
+        title: 'Node Gamma',
+        parent_id: '100',
+        project_id: '1',
+    },
+    {
+        id: '104',
+        title: 'Node Delta',
+        parent_id: '101',
+        project_id: '1',
+    },
+    {
+        id: '105',
+        title: 'Node Epsilon',
+        parent_id: '102',
+        project_id: '1',
+    },
+    {
+        id: '106',
+        title: 'Node Zeta',
+        parent_id: '103',
+        project_id: '1',
+    },
+    {
+        id: '107',
+        title: 'Node Eta',
+        parent_id: '104',
+        project_id: '1',
+    },
+    {
+        id: '108',
+        title: 'Node Theta',
+        parent_id: '105',
+        project_id: '1',
+    },
+    {
+        id: '109',
+        title: 'Node Iota',
+        parent_id: '106',
+        project_id: '1',
+    },
+    {
+        id: '110',
+        title: 'Node Kappa',
+        parent_id: '104',
+        project_id: '1',
+    },
+    {
+        id: '111',
+        title: 'Node Lambda',
+        parent_id: '105',
+        project_id: '1',
+    },
+    {
+        id: '112',
+        title: 'Node Mu',
+        parent_id: '106',
+        project_id: '1',
+    },
+    {
+        id: '113',
+        title: 'Node Nu',
+        parent_id: '107',
+        project_id: '1',
+    },
+    {
+        id: '114',
+        title: 'Node Xi',
+        parent_id: '108',
+        project_id: '1',
+    },
+    {
+        id: '115',
+        title: 'Node Omicron',
+        parent_id: '109',
+        project_id: '1',
+    },
+    {
+        id: '116',
+        title: 'Node Pi',
+        parent_id: '110',
+        project_id: '1',
+    },
+    {
+        id: '117',
+        title: 'Node Rho',
+        parent_id: '111',
+        project_id: '1',
+    },
+    {
+        id: '118',
+        title: 'Node Sigma',
+        parent_id: '112',
+        project_id: '1',
+    },
+    {
+        id: '119',
+        title: 'Node Tau',
+        parent_id: '113',
+        project_id: '1',
+    },
 ];

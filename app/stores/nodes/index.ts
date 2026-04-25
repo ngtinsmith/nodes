@@ -2,84 +2,82 @@ import { ref, computed, toRaw } from 'vue';
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
 import { createNodeMap } from '@/utils/array';
-import { buildTree } from '@/utils/tree';
 import { getParensMatch, incrementDuplicateCount } from '@/utils/duplicates';
 import type {
-    Node,
     NodeId,
     NodeMap,
-    NodeState,
+    RawNodeState,
     NodeStatesMap,
     RawNode,
+    RawNodeWithChildren,
+    NormalizedNodesMap,
 } from './interfaces';
-import { nodes as staticNodes } from './static/nodes';
-import { nodeStates as stateNodeStates } from './static/node-states';
+import { nodes as staticNodes } from '../_data/nodes';
+import { nodeStates as stateNodeStates } from '../_data/node-states';
+import { useProjects } from '../projects';
 
 export const useNodes = defineStore('nodes', () => {
+    const projectsStore = useProjects();
+
     // State
     const rawNodes = ref<RawNode[]>([]);
-    const nodeStates = ref<NodeState[]>([]);
+    const rawNodeStates = ref<RawNodeState[]>([]);
 
-    // Tables
     const nodeMap = computed(() =>
         rawNodes.value.reduce<NodeMap>(createNodeMap, {}),
     );
+
     const nodeStateMap = computed(() =>
-        nodeStates.value.reduce<NodeStatesMap>(createNodeMap, {}),
+        rawNodeStates.value.reduce<NodeStatesMap>(createNodeMap, {}),
     );
 
+    type TParentMap = Record<NodeId, NodeId | null>;
+
     // Derived parent lookup — built from children[], which is the single source of truth
-    const parentMap = computed((): Record<NodeId, NodeId | null> => {
-        const map: Record<NodeId, NodeId | null> = {};
+    const parentMap = computed((): TParentMap => {
+        const map: TParentMap = {};
+
         for (const [id, node] of Object.entries(nodeMap.value)) {
             if (!(id in map)) map[id] = null;
-            for (const childId of node.children) {
+
+            const childIds = rawNodes.value
+                .filter((n) => n.parent_id === node.id)
+                .map((n) => n.id);
+
+            for (const childId of childIds) {
                 map[childId] = id;
             }
         }
         return map;
     });
 
-    // Getters
-    const rootIds = computed(() =>
-        nodeStates.value.filter((n) => n.primary).map((n) => n.id),
-    );
-    const mappedTree = computed(() =>
-        buildTree(
-            rootIds.value,
-            nodeMap.value,
-            nodeStateMap.value,
-            parentMap.value,
-        ),
-    );
-    const tree = computed<Node>(() => ({
-        id: '0',
-        parent_id: null,
-        title: 'Root',
-        children: mappedTree.value,
-        complete: false,
-        expanded: true,
-    }));
+    const parentChildrenMap = computed(() => {
+        // { [parent_id]: node.id[] }
+        const map: Record<string, string[]> = {};
 
-    const treeRows = computed(() => {
-        const nodes: Node[] = [];
-        const nodeMap: Record<string, boolean> = {};
+        for (const node of rawNodes.value) {
+            const entry = map[node.parent_id];
 
-        function mapTreeRows(node: Node) {
-            if (nodeMap[node.id]) return;
-
-            nodes.push(node);
-            nodeMap[node.id] = true;
-
-            if (node.children.length > 0) {
-                node.children.forEach(mapTreeRows);
+            if (entry && Array.isArray(entry)) {
+                entry.push(node.id);
+            } else {
+                map[node.parent_id] = [node.id];
             }
         }
 
-        tree.value.children.forEach(mapTreeRows);
-
-        return nodes;
+        return map;
     });
+
+    const normalizedNodes = computed((): RawNodeWithChildren[] => {
+        return rawNodes.value.map((rawNode) => ({
+            ...rawNode,
+            children: parentChildrenMap.value[rawNode.id] ?? [],
+        }));
+    });
+
+    const normalizedNodesMap = computed(() =>
+        normalizedNodes.value.reduce<NormalizedNodesMap>(createNodeMap, {}),
+    );
 
     const focusedNode = ref<NodeId>('');
 
@@ -120,17 +118,28 @@ export const useNodes = defineStore('nodes', () => {
 
     // Actions
     async function fetchNodes() {
+        // TODO: explore joins for single fetch call
+
         // api - node data
         rawNodes.value = staticNodes;
 
         // api - node states
-        nodeStates.value = stateNodeStates;
+        rawNodeStates.value = stateNodeStates;
     }
 
-    const createNode = (title: string): RawNode => ({
+    const createRawNode = ({
+        title,
+        parentId,
+        projectId,
+    }: {
+        title: string;
+        parentId: string;
+        projectId: string;
+    }): RawNode => ({
         id: uuidv4(),
         title,
-        children: [],
+        project_id: projectId,
+        parent_id: parentId,
     });
 
     function addIntoNode({
@@ -140,21 +149,23 @@ export const useNodes = defineStore('nodes', () => {
         parentId: string;
         title: string;
     }) {
-        const newNode: RawNode = createNode(title);
+        const projectId = projectsStore.activeProjectId;
+        const newNode = createRawNode({ title, parentId, projectId });
         const parentNode = rawNodes.value.find((node) => node.id === parentId);
 
-        if (!parentNode) return;
+        if (!parentNode || !projectsStore.activeProject) return;
 
-        parentNode.children.push(newNode.id);
         rawNodes.value.push(newNode);
-
-        nodeStates.value.push({
+        rawNodeStates.value.push({
             id: newNode.id,
+            node_id: newNode.id,
+            project_id: projectId,
             complete: false,
             expanded: false,
         });
 
-        const parentState = nodeStates.value.find((s) => s.id === parentId);
+        const parentState = rawNodeStates.value.find((s) => s.id === parentId);
+
         if (parentState && !parentState.expanded) {
             parentState.expanded = true;
         }
@@ -166,30 +177,36 @@ export const useNodes = defineStore('nodes', () => {
         title: string,
         pos: 'above' | 'below',
     ) {
-        const newNode: RawNode = createNode(title);
         const parentNode = rawNodes.value.find((node) => node.id === parentId);
+        const siblingIds = parentChildrenMap.value[parentId];
 
-        if (!parentNode) return;
+        if (!parentNode || !siblingIds?.length) return;
 
-        const siblingIds = parentNode.children;
-        let currentIdx = siblingIds.findIndex((childId) => childId === id);
+        const newNode: RawNode = createRawNode({
+            title,
+            parentId,
+            projectId: projectsStore.activeProjectId,
+        });
 
-        if (pos === 'below') {
-            currentIdx += 1;
-        }
+        // let currentIdx = siblingIds.findIndex((childId) => childId === id);
 
-        if (currentIdx === siblingIds.length) {
-            parentNode.children.push(newNode.id);
-        } else {
-            parentNode.children.splice(currentIdx, 0, newNode.id);
-        }
+        // if (pos === 'below') {
+        //     currentIdx += 1;
+        // }
+
+        // if (currentIdx === siblingIds.length) {
+        //     parentNode.children.push(newNode.id);
+        // } else {
+        //     parentNode.children.splice(currentIdx, 0, newNode.id);
+        // }
 
         rawNodes.value.push(newNode);
-
-        nodeStates.value.push({
+        rawNodeStates.value.push({
             id: newNode.id,
             complete: false,
             expanded: false,
+            node_id: newNode.id,
+            project_id: projectsStore.activeProjectId,
         });
     }
 
@@ -202,8 +219,9 @@ export const useNodes = defineStore('nodes', () => {
         if (!parentId || !node || !nodeState) return;
 
         const parentNode = nodeMap.value[parentId];
+        const siblingIds = parentChildrenMap.value[parentId];
 
-        if (!parentNode) return;
+        if (!parentNode || !siblingIds) return;
 
         const cloneId = uuidv4();
         const nodeClone = structuredClone(toRaw(node));
@@ -214,7 +232,7 @@ export const useNodes = defineStore('nodes', () => {
 
         const { hasBrace, braced, raw } = getParensMatch(nodeClone.title);
         const siblingTitles =
-            parentNode?.children
+            siblingIds
                 .map((id) => nodeMap.value[id]?.title || '')
                 .filter(Boolean) ?? [];
 
@@ -227,24 +245,26 @@ export const useNodes = defineStore('nodes', () => {
         }
 
         // 2 - insert or splice nodeClone
-        const referenceIndex = parentNode.children.findIndex(
+        const referenceIndex = siblingIds.findIndex(
             (childId) => childId === id,
         );
         const cloneIndex = referenceIndex + 1;
 
-        if (cloneIndex === parentNode.children.length) {
-            parentNode.children.push(cloneId);
+        if (cloneIndex === siblingIds.length) {
+            siblingIds.push(cloneId);
         } else {
-            parentNode.children.splice(cloneIndex, 0, cloneId);
+            siblingIds.splice(cloneIndex, 0, cloneId);
         }
 
         rawNodes.value.push(nodeClone);
 
         // TODO: option to preserve reference state
-        nodeStates.value.push({
+        rawNodeStates.value.push({
             id: cloneId,
             complete: false,
             expanded: false,
+            node_id: cloneId,
+            project_id: projectsStore.activeProjectId,
         });
     }
 
@@ -255,18 +275,23 @@ export const useNodes = defineStore('nodes', () => {
         const parentId = parentMap.value[nodeId];
         const parentNode = rawNodes.value.find((node) => node.id === parentId);
 
-        if (!parentNode) return;
+        if (!parentNode || !parentId) return;
 
-        parentNode.children = parentNode.children.filter(
-            (childId) => childId !== nodeId,
-        );
+        // TODO: delete from raw
+        // const siblingIds = parentChildrenMap.value[parentId];
+
+        // parentNode.children = parentNode.children.filter(
+        //     (childId) => childId !== nodeId,
+        // );
 
         rawNodes.value = rawNodes.value.filter((node) => node.id !== nodeId);
-        nodeStates.value = nodeStates.value.filter((s) => s.id !== nodeId);
+        rawNodeStates.value = rawNodeStates.value.filter(
+            (s) => s.id !== nodeId,
+        );
     }
 
     function toggleNode(id: string) {
-        nodeStates.value = nodeStates.value.map((node) => {
+        rawNodeStates.value = rawNodeStates.value.map((node) => {
             if (node.id === id) {
                 return {
                     ...node,
@@ -279,7 +304,7 @@ export const useNodes = defineStore('nodes', () => {
     }
 
     function toggleNodeCheck(id: string) {
-        nodeStates.value = nodeStates.value.map((node) => {
+        rawNodeStates.value = rawNodeStates.value.map((node) => {
             if (node.id === id) {
                 return {
                     ...node,
@@ -293,9 +318,9 @@ export const useNodes = defineStore('nodes', () => {
 
     return {
         rawNodes,
-        nodeStates,
-        tree,
-        treeRows,
+        nodeStates: rawNodeStates,
+        normalizedNodes,
+        normalizedNodesMap,
 
         // getters
         nodeMap,

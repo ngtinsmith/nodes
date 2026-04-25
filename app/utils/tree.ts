@@ -1,24 +1,19 @@
 import type {
     Node,
-    NodeId,
-    NodeMap,
     NodeStatesMap,
-    RawNode,
-} from '@/stores/nodes/interfaces';
+    NormalizedNodesMap,
+} from '~/stores/nodes/interfaces';
 
-export const hasChildren = (node?: RawNode) => {
-    const childSize = node?.children?.length;
+export const buildTree = (args: {
+    childIds: string[];
+    nodeMap: NormalizedNodesMap;
+    nodeStatesMap: NodeStatesMap;
+}): Node[] => {
+    const { childIds, nodeMap, nodeStatesMap } = args;
 
-    return childSize && childSize > 0;
-};
+    if (childIds.length === 0) return [];
 
-export const buildTree = (
-    nodeIds: NodeId[],
-    nodeMap: NodeMap,
-    nodeStatesMap: NodeStatesMap,
-    parentMap: Record<NodeId, NodeId | null>,
-): Node[] => {
-    return nodeIds
+    return childIds
         .map((id) => {
             const node = nodeMap[id];
             const states = nodeStatesMap[id];
@@ -28,15 +23,10 @@ export const buildTree = (
             return {
                 ...node,
                 ...states,
-                parent_id: parentMap[id] ?? null,
-                children: hasChildren(node)
-                    ? buildTree(
-                          node?.children ?? [],
-                          nodeMap,
-                          nodeStatesMap,
-                          parentMap,
-                      )
-                    : [],
+                children:
+                    node.children.length > 0
+                        ? buildTree({ ...args, childIds: node.children })
+                        : [],
             };
         })
         .filter((node) => node !== undefined);

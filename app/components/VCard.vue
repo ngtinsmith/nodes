@@ -4,8 +4,9 @@ import VProgressOverview from './VProgressOverview.vue';
 import type { Node } from '@/stores/nodes/interfaces';
 
 export interface NodeCollectionProps {
+    id: string;
     title: string;
-    node: Node;
+    node: Node | null;
 }
 
 const props = defineProps<NodeCollectionProps>();
@@ -30,6 +31,7 @@ const props = defineProps<NodeCollectionProps>();
         <div class="content">
             <div class="tree">
                 <VNode
+                    v-if="node"
                     root
                     :node="node"
                     :tree-line="true"

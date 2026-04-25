@@ -1,30 +1,33 @@
 export type NodeId = string;
 export type NodeMark = 'red' | 'green' | 'blue';
 
-export interface NodeState {
+export interface NodeProperties {
     id: NodeId;
+    parent_id: NodeId;
+    project_id: string;
+}
+
+export interface RawNodeState extends Omit<NodeProperties, 'parent_id'> {
+    node_id: string;
     expanded: boolean;
-    primary?: boolean;
     complete: boolean;
+    primary?: boolean;
     modified?: string;
     locked?: boolean;
     mark?: NodeMark;
 }
 
-export interface NodeProperties {
-    id: NodeId;
+export interface RawNode extends NodeProperties {
     title: string;
 }
 
-export interface RawNode extends NodeProperties {
-    children: NodeId[];
-}
-
-export interface Node extends NodeProperties, NodeState {
-    parent_id: NodeId | null;
+export interface Node extends NodeProperties, Omit<RawNodeState, 'node_id'> {
+    title: string;
     children: Node[];
 }
 
 export type NodeMap = Record<NodeId, RawNode>;
-export type NodeStatesMap = Record<NodeId, NodeState>;
-export type TNodeState = keyof Pick<NodeState, 'expanded' | 'complete'>;
+export type NodeStatesMap = Record<NodeId, RawNodeState>;
+export type TNodeState = keyof Pick<RawNodeState, 'expanded' | 'complete'>;
+export type RawNodeWithChildren = RawNode & { children: string[] };
+export type NormalizedNodesMap = Record<NodeId, RawNodeWithChildren>;

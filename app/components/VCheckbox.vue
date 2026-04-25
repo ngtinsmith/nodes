@@ -5,7 +5,12 @@ defineEmits<{ click: [] }>();
 
 <template>
     <input
-        class="v-checkbox"
+        :class="[
+            'checkbox',
+            {
+                checked,
+            },
+        ]"
         type="checkbox"
         :checked="checked"
         @click.prevent="$emit('click')"
@@ -15,7 +20,7 @@ defineEmits<{ click: [] }>();
 <style lang="scss" scoped>
 $size: 14;
 
-.v-checkbox {
+.checkbox {
     appearance: none;
     print-color-adjust: exact;
     display: inline-block;
@@ -32,7 +37,7 @@ $size: 14;
     border-radius: 2px;
     cursor: pointer;
 
-    &:checked {
+    &.checked {
         border-color: transparent;
         background-color: currentColor;
         background-image: url('assets/icons/checkmark.svg');

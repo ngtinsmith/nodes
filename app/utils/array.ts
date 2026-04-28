@@ -10,3 +10,14 @@ export const createNodeMap = <
     ...acc,
     [cur.id]: cur,
 });
+
+export const createNodeStateMap = <
+    M extends Record<NodeId, I>,
+    I extends { node_id: NodeId },
+>(
+    acc: M,
+    cur: I,
+): M => ({
+    ...acc,
+    [cur.node_id]: cur,
+});

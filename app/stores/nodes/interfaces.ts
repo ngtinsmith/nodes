@@ -19,6 +19,7 @@ export interface RawNodeState extends Omit<NodeProperties, 'parent_id'> {
 
 export interface RawNode extends NodeProperties {
     title: string;
+    order: number;
 }
 
 export interface Node extends NodeProperties, Omit<RawNodeState, 'node_id'> {
@@ -29,5 +30,5 @@ export interface Node extends NodeProperties, Omit<RawNodeState, 'node_id'> {
 export type NodeMap = Record<NodeId, RawNode>;
 export type NodeStatesMap = Record<NodeId, RawNodeState>;
 export type TNodeState = keyof Pick<RawNodeState, 'expanded' | 'complete'>;
-export type RawNodeWithChildren = RawNode & { children: string[] };
+export type RawNodeWithChildren = RawNode & { children: string[] }; // TODO: better type name?
 export type NormalizedNodesMap = Record<NodeId, RawNodeWithChildren>;

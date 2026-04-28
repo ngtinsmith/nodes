@@ -29,15 +29,18 @@ const hasDanglingLine = computed(() => (childNode: Node, idx: number) => {
 
     const isFirstWithChildren =
         idx === 0 &&
-        childNode.children &&
         childNode.children.length === 1 &&
         childrenSize.value === 1;
 
-    const isLast = idx > 0 && idx === (props.node.children?.length || 0) - 1;
+    const isLast = idx === props.node.children.length - 1;
+    const hasSiblingsAndIsLast = idx > 0 && isLast;
+    const hasManyChildren = children.length > 0;
 
-    const hasManyChildren = children && children.length > 0;
-
-    return (isLast && hasManyChildren) || isFirstWithChildren;
+    return (
+        (hasSiblingsAndIsLast && hasManyChildren) ||
+        isFirstWithChildren ||
+        (isLast && hasManyChildren)
+    );
 });
 const canHover = computed(() => {
     if (nodeStore.focusedNode === '') return true;
@@ -56,22 +59,30 @@ function addAbove() {
     if (!props.node.parent_id) return;
 
     const title = `Node {above} ${Math.round(Math.random() * 10000)}`;
-    nodeStore.addNode(props.node.parent_id, props.node.id, title, 'above');
+    nodeStore.addNode({
+        node: props.node,
+        title,
+        pos: 'above',
+    });
 }
 
 function addBelow() {
     if (!props.node.parent_id) return;
 
     const title = `Node {below} ${Math.round(Math.random() * 10000)}`;
-    nodeStore.addNode(props.node.parent_id, props.node.id, title, 'below');
+    nodeStore.addNode({
+        node: props.node,
+        title,
+        pos: 'below',
+    });
 }
 
 function duplicate() {
-    nodeStore.duplicateNode(props.node.id);
+    nodeStore.duplicateNode(props.node.id, props.node.parent_id);
 }
 
 function deleteNode() {
-    nodeStore.deleteNode(props.node.id);
+    nodeStore.deleteNode(props.node);
 }
 
 function toggleCheck() {
@@ -105,6 +116,7 @@ function expandNode() {
                 'row',
                 {
                     'is-focused': isFocused,
+                    'no-children': node.children.length === 0,
                 },
             ]"
             :data-hover="canHover"
@@ -112,7 +124,7 @@ function expandNode() {
             <div class="content">
                 <div class="details">
                     <button
-                        v-if="node.children && node.children.length > 0"
+                        v-if="node.children.length > 0"
                         class="sign-toggle"
                         @click="nodeStore.toggleNode(node.id)"
                     >
@@ -125,10 +137,6 @@ function expandNode() {
                             class="sign-icon"
                         />
                     </button>
-                    <div
-                        v-else
-                        class="sign-empty"
-                    />
                     <div class="checkbox-wrapper">
                         <VCheckbox
                             :checked="node.complete"
@@ -194,8 +202,10 @@ function expandNode() {
 <style lang="scss" scoped>
 .node {
     --hover-bg: color-mix(in srgb, var(--slate-900) 95%, var(--white));
-    --tree-line-color: color-mix(in srgb, var(--slate-700) 70%, transparent);
-
+    /*
+    --tree-line-color: color-mix(in srgb, var(--slate-700) 100%, transparent);
+    */
+    --tree-line-color: color-mix(in srgb, var(--emerald-500) 100%, transparent);
     $icon-size: 20;
 
     width: 100%;
@@ -203,15 +213,28 @@ function expandNode() {
 
     .row {
         display: flex;
-        padding: rem(2) rem(4);
+        margin-inline: rem(2) rem(4);
         background-color: transparent;
+        padding-right: rem(4);
 
         &.is-focused,
         &[data-hover='true']:hover {
-            background-color: var(--transparent-white-5);
+            background-color: rgb(50, 57, 73);
+            /*
+               background-color: var(--transparent-white-15);
+            */
 
             .sign-toggle {
-                background-color: var(--hover-bg);
+                background-color: unset;
+                background-color: var(--slate-900);
+            }
+
+            .sign-icon {
+                fill: var(--slate-500);
+            }
+
+            :deep(.checkbox:not(.checked)) {
+                border-color: var(--slate-500);
             }
 
             .controls {
@@ -219,11 +242,17 @@ function expandNode() {
                 pointer-events: all;
             }
         }
+
+        &.no-children {
+            margin-left: rem(22);
+            padding-left: rem(8);
+        }
     }
 
     .details {
         display: flex;
         align-items: center;
+        height: 100%;
     }
 
     .controls {
@@ -237,6 +266,7 @@ function expandNode() {
         align-items: center;
         justify-content: space-between;
         flex: 1;
+        height: rem(28);
     }
 
     .title {
@@ -251,7 +281,7 @@ function expandNode() {
     }
 
     .children {
-        padding-left: rem(23);
+        padding-left: rem(24);
 
         &.no-gutter {
             padding-left: 0;
@@ -260,7 +290,7 @@ function expandNode() {
 
     .group-line {
         position: absolute;
-        top: 2px;
+        top: rem(2);
         bottom: rem(10);
         left: rem(36);
         width: rem(8);
@@ -283,18 +313,16 @@ function expandNode() {
 
     .checkbox-wrapper {
         display: flex;
-        margin-inline: rem(6) rem(8);
-    }
-
-    .sign-empty {
-        height: rem($icon-size);
-        width: rem($icon-size);
+        margin-right: rem(8);
     }
 
     .sign-toggle {
         display: flex;
         justify-content: center;
+        align-items: center;
         background-color: var(--slate-900);
+        height: 100%;
+        margin-right: rem(8);
 
         &:hover {
             background-color: var(--hover-bg);

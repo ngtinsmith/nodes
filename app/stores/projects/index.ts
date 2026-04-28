@@ -36,7 +36,7 @@ export const useProjects = defineStore('projects', () => {
         await tagStore.fetchSectionTags();
         await boardStore.fetchBoards(activeId);
         await cardStore.fetchCards(activeId);
-        await nodeStore.fetchNodes();
+        await nodeStore.fetchNodes(activeId);
     }
 
     return { projects, activeProject, activeProjectId, loadProjects };

@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
-
 defineProps<{
     fullscreen?: boolean;
 }>();
@@ -52,7 +50,9 @@ const saving = ref(false);
             </div>
         </div>
         <div class="content">
-            <h2>Ratio enim nostra consentit pugnat loratio.</h2>
+            <h2 class="node-title">
+                Ratio enim nostra consentit pugnat loratio.
+            </h2>
             <textarea
                 id=""
                 name=""
@@ -125,6 +125,10 @@ Quo tandem modo? Ex rebus enim timiditas, non ex vocabulis nascitur. Sedulo, inq
             fill: var(--slate-800);
         }
     }
+}
+
+.node-title {
+    line-height: 1;
 }
 
 .content {

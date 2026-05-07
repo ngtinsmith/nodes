@@ -13,7 +13,7 @@ defineProps<SidebarGroupProps>();
 <template>
     <section>
         <h3 :class="{ generic }">
-            <ListAlt /><span>{{ heading }}</span>
+            <ListAlt /><span class="heading-name">{{ heading }}</span>
         </h3>
         <div class="sections">
             <button
@@ -34,19 +34,21 @@ defineProps<SidebarGroupProps>();
 
 <style lang="scss" scoped>
 h3 {
-    --default-color: var(--indigo-300);
+    --default-color: var(--indigo-200);
     --generic-color: var(--white);
 
     display: flex;
     align-items: center;
-    margin-bottom: rem(16);
+    padding-inline: rem(12);
+    margin-bottom: rem(12);
+    gap: rem(8);
 
     &.generic {
         svg {
             fill: var(--generic-color);
         }
 
-        span {
+        .heading-name {
             color: var(--generic-color);
         }
     }
@@ -55,8 +57,7 @@ h3 {
         fill: var(--default-color);
     }
 
-    span {
-        margin-left: rem(8);
+    .heading-name {
         font-weight: 700;
         color: var(--default-color);
     }
@@ -71,20 +72,18 @@ h3 {
 .section {
     padding: rem(4) rem(12);
     border-radius: rem(4);
-    color: var(--gray-300);
+    color: var(--slate-100);
     font-size: rem(14);
     line-height: 1.2;
-    border-left: 4px solid transparent;
 
     &:hover {
         background-color: var(--transparent-white-5);
     }
 
     &.active {
-        color: var(--gray-50);
+        color: var(--slate-50);
         font-weight: 700;
         background-color: var(--transparent-white-5);
-        border-left: 4px solid var(--indigo-300);
         border-radius: 0 rem(4) rem(4) 0;
     }
 }

@@ -23,17 +23,16 @@ const isOpenModal = ref(false);
 const isFullscreenModal = ref(false);
 
 const sidebarStore = useSidebar();
+const projectsStore = useProjects();
+const cardsStore = useCards();
 
 const sidebarConfig = computed(() => {
     return {
         attr: sidebarStore.config.stacked ? 'top' : 'left',
-        // value: sidebarStore.config.stacked ? 35 : 50,
-        value: 50,
+        value: sidebarStore.config.stacked ? 0 : 50,
+        // value: 50,
     };
 });
-
-const projectsStore = useProjects();
-const cardsStore = useCards();
 
 onMounted(async () => {
     await projectsStore.loadProjects();
@@ -66,6 +65,8 @@ function exitFullscreen() {
         <VResizable
             direction="horizontal"
             :left="sidebarStore.config.stacked ? 25 : 40"
+            root
+            :stacked="sidebarStore.config.stacked"
         >
             <template
                 v-if="sidebarStore.config.enabled"
@@ -157,7 +158,7 @@ main {
 .main-header {
     height: rem(48);
     margin-inline: auto;
-    background-color: var(--gray-900);
+    background-color: var(--slate-900);
 }
 
 .main-content {

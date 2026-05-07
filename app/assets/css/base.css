@@ -31,6 +31,7 @@
     --slate-50: #f8fafc;
     --gray-100: #f3f4f6;
     --slate-100: #f1f5f9;
+    --slate-300: #cbd5e1;
     --emerald-200: #a7f3d0;
     --emerald-300: #86efac;
     --indigo-200: #c7d2fe;
@@ -62,6 +63,8 @@
 
     --color-heading: var(--vt-c-text-light-1);
     --color-text: var(--vt-c-text-light-1);
+
+    --resizable-border-color: var(--slate-700);
 }
 
 @media (prefers-color-scheme: dark) {

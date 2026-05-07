@@ -29,12 +29,12 @@ export const sections: Section[] = [
         id: '5',
         title: 'DEV',
         project_id: '1',
-        tag_id: '1',
+        tag_id: '2',
     },
     {
         id: '6',
         title: 'Work',
         project_id: '1',
-        tag_id: '1',
+        tag_id: '2',
     },
 ];

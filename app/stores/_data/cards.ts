@@ -15,4 +15,11 @@ export const cards: Card[] = [
         board_id: '2',
         root_node_id: '100',
     },
+    {
+        id: '3',
+        title: 'Numero',
+        project_id: '1',
+        board_id: '2',
+        root_node_id: '200',
+    },
 ];

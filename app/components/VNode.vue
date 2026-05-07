@@ -202,10 +202,7 @@ function expandNode() {
 <style lang="scss" scoped>
 .node {
     --hover-bg: color-mix(in srgb, var(--slate-900) 95%, var(--white));
-    /*
     --tree-line-color: color-mix(in srgb, var(--slate-700) 100%, transparent);
-    */
-    --tree-line-color: color-mix(in srgb, var(--emerald-500) 100%, transparent);
     $icon-size: 20;
 
     width: 100%;

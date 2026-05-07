@@ -1,13 +1,23 @@
 <script lang="ts" setup>
+import { useSidebar } from '~/stores/sidebar';
+
 interface Props {
     context?: string;
 }
 
 const { context = 'app' } = defineProps<Props>();
+const sidebarStore = useSidebar();
 </script>
 
 <template>
-    <div class="search">
+    <div
+        :class="[
+            'search',
+            {
+                stacked: sidebarStore.config.stacked,
+            },
+        ]"
+    >
         <Search />
         <label
             id="search-label"
@@ -38,7 +48,11 @@ const { context = 'app' } = defineProps<Props>();
     width: 100%;
     height: rem(48);
     padding-inline: rem(24);
-    background-color: var(--gray-900);
+    background-color: var(--slate-900);
+
+    &.stacked {
+        padding-left: rem(36);
+    }
 
     svg {
         fill: var(--field-color);

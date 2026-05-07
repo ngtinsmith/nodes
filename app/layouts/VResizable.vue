@@ -5,14 +5,14 @@ interface Props {
     top?: number;
     left?: number;
     direction: 'vertical' | 'horizontal';
+    root?: boolean;
+    stacked?: boolean;
 }
 
 const props = defineProps<Props>();
 
 const containerRef = ref<HTMLDivElement | null>(null);
 const topRef = ref<HTMLDivElement | null>(null);
-const bottomRef = ref<HTMLDivElement | null>(null);
-const handleRef = ref<HTMLDivElement | null>(null);
 
 const defaultTopHeight = props.top ?? 50;
 const defaultLeftWidth = props.left ?? 50;
@@ -80,8 +80,16 @@ const doubleClickHandle = () => {
 const blockStyle = computed(() => {
     return props.direction === 'vertical'
         ? {
-              first: { height: `${blockSize.height}%` },
-              second: { height: `${100 - blockSize.height}%` },
+              first: {
+                  height:
+                      blockSize.height > 0 ? `${blockSize.height}%` : 'auto',
+              },
+              second: {
+                  height:
+                      blockSize.height > 0
+                          ? `${100 - blockSize.height}%`
+                          : 'auto',
+              },
           }
         : {
               first: { width: `${blockSize.width}%` },
@@ -93,7 +101,7 @@ const blockStyle = computed(() => {
 <template>
     <div
         ref="containerRef"
-        :class="['resizable', { 'is-stacked': direction === 'vertical' }]"
+        :class="['resizable', { vertical: direction === 'vertical' }]"
     >
         <div
             v-if="$slots['top']"
@@ -102,6 +110,9 @@ const blockStyle = computed(() => {
                 'top',
                 {
                     'full-width': !$slots['bottom'],
+                    vertical: direction === 'vertical',
+                    root: Boolean(props.root),
+                    stacked: Boolean(props.stacked),
                 },
             ]"
             :style="blockStyle.first"
@@ -129,6 +140,7 @@ const blockStyle = computed(() => {
                 'bottom',
                 {
                     'full-width': !$slots['top'],
+                    vertical: direction === 'vertical',
                 },
             ]"
             :style="blockStyle.second"
@@ -144,13 +156,22 @@ const blockStyle = computed(() => {
     width: 100%;
     height: 100%;
 
-    &.is-stacked {
+    &.vertical {
         flex-direction: column;
+        max-width: 360px;
     }
 }
 
 .top {
-    border-bottom: 1px solid #555;
+    border-bottom: 1px solid var(--resizable-border-color);
+    overflow-y: auto;
+
+    &.vertical {
+        min-height: 300px;
+    }
+    &.root.stacked {
+        max-width: 360px;
+    }
 
     &.full-width {
         flex: 1;
@@ -158,6 +179,9 @@ const blockStyle = computed(() => {
 }
 
 .bottom {
+    flex: 1;
+    overflow-y: auto;
+
     &.full-width {
         flex: 1;
     }

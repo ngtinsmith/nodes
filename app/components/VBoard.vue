@@ -50,7 +50,7 @@ const { board } = defineProps<Props>();
             top: 0;
             left: 0;
             height: 100%;
-            border-left: rem(6) solid var(--indigo-300);
+            border-left: 4px solid var(--indigo-300);
         }
     }
 }

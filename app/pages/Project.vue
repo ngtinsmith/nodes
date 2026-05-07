@@ -13,6 +13,8 @@ import { useSidebar } from '~/stores/sidebar';
 import VResizable from '~/layouts/VResizable.vue';
 import { useCards } from '~/stores/cards';
 import { useProjects } from '~/stores/projects';
+import BoardTab from '~/components/atoms/BoardTab.vue';
+import { useBoards } from '~/stores/boards';
 
 provide<NodeModal>(nodeModalKey, {
     expandNodeContent,
@@ -25,12 +27,12 @@ const isFullscreenModal = ref(false);
 const sidebarStore = useSidebar();
 const projectsStore = useProjects();
 const cardsStore = useCards();
+const boardsStore = useBoards();
 
 const sidebarConfig = computed(() => {
     return {
         attr: sidebarStore.config.stacked ? 'top' : 'left',
         value: sidebarStore.config.stacked ? 0 : 50,
-        // value: 50,
     };
 });
 
@@ -88,7 +90,31 @@ function exitFullscreen() {
             </template>
             <template #bottom>
                 <div class="workspace">
-                    <header class="main-header"></header>
+                    <div class="workspace-header">
+                        <div class="board-tabs">
+                            <template
+                                v-for="(board, i) in boardsStore.activeBoards"
+                                :key="board.id"
+                            >
+                                <BoardTab :board="board" />
+                                <div
+                                    v-if="
+                                        i ===
+                                        boardsStore.activeBoards.length - 1
+                                    "
+                                    class="board-divider"
+                                />
+                            </template>
+                        </div>
+                        <div class="board-header-controls">
+                            <button>
+                                <ViewColumn2 />
+                            </button>
+                            <button>
+                                <EllipsisHorizontal />
+                            </button>
+                        </div>
+                    </div>
                     <div
                         ref="mainContentRef"
                         class="main-content"
@@ -101,7 +127,10 @@ function exitFullscreen() {
                                 :title="card.title"
                                 :node="card.tree"
                             />
-                            <button class="btn-new-card">new card</button>
+                            <button class="btn-new-card">
+                                <AddFilled />
+                                <span> Add new card </span>
+                            </button>
                         </VCanvas>
                         <VModal
                             v-if="mainContentRef"
@@ -125,29 +154,9 @@ function exitFullscreen() {
     </main>
 </template>
 
-<style lang="scss">
-.btn-new-card {
-    color: black;
-    padding: 8px 16px;
-    border: 1px solid;
-}
-
+<style lang="scss" scoped>
 main {
     height: 100vh;
-}
-
-.inner {
-    display: flex;
-    height: 100%;
-    overflow: hidden;
-}
-
-.sidebars {
-    display: flex;
-
-    &.is-stacked {
-        flex-direction: column;
-    }
 }
 
 .workspace {
@@ -155,10 +164,22 @@ main {
     overflow: hidden;
 }
 
-.main-header {
+.workspace-header {
+    display: flex;
+    justify-content: space-between;
     height: rem(48);
-    margin-inline: auto;
     background-color: var(--slate-900);
+}
+
+.board-tabs {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.board-divider {
+    height: 100%;
+    border-left: 1px solid var(--resizable-border-color);
 }
 
 .main-content {
@@ -169,22 +190,44 @@ main {
     height: calc(100% - rem(48));
 }
 
-svg {
-    width: rem(20);
-    height: rem(20);
-    fill: var(--slate-300);
+.btn-new-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: rem(4);
+    height: rem(48);
+    border-radius: rem(8);
+    color: var(--black);
+    padding: 8px 16px;
+    border: 1px solid var(--slate-700);
+    width: 300px;
+    flex-shrink: 0;
+
+    svg {
+        fill: var(--slate-700);
+    }
+
+    span {
+        font-weight: 700;
+        font-size: rem(14);
+        white-space: pre;
+    }
 }
 
-.visually-hidden {
-    border: 0;
-    clip: rect(1px, 1px, 1px, 1px);
-    clip-path: inset(50%);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    white-space: nowrap;
-    width: 1px;
+.board-header-controls {
+    display: flex;
+    align-items: center;
+    gap: rem(4);
+    padding-right: rem(12);
+
+    button {
+        display: flex;
+        padding: rem(4);
+        border-radius: rem(4);
+
+        &:hover {
+            background-color: var(--transparent-white-10);
+        }
+    }
 }
 </style>

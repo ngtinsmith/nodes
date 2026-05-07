@@ -21,8 +21,8 @@ const sidebarGroups = computed(() =>
 </script>
 
 <template>
-    <aside class="v-sidebar">
-        <div class="top">
+    <aside class="sidebar-section">
+        <div class="project-bar">
             <div class="sidebar-controls">
                 <button class="dropdown-toggle">
                     <span>Cosmic Project</span>
@@ -41,11 +41,20 @@ const sidebarGroups = computed(() =>
                 :sections="group.sections"
             />
         </div>
+        <div class="user-bar">
+            <button class="btn-user">
+                <UserAvatarOutline />
+                <span>Superuser</span>
+            </button>
+            <button class="btn-settings">
+                <Settings />
+            </button>
+        </div>
     </aside>
 </template>
 
 <style lang="scss" scoped>
-.v-sidebar {
+.sidebar-section {
     min-width: 280px;
     height: 100%;
     background-color: var(--slate-900);
@@ -54,7 +63,7 @@ const sidebarGroups = computed(() =>
     border-right: 1px solid var(--resizable-border-color);
 }
 
-.top {
+.project-bar {
     height: rem(48);
     width: 100%;
     color: black;
@@ -111,5 +120,39 @@ const sidebarGroups = computed(() =>
     gap: rem(24);
     padding: rem(16) rem(24);
     overflow-y: auto;
+}
+
+.user-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: rem(48);
+    padding-inline: rem(12);
+}
+
+.btn-user {
+    display: flex;
+    align-items: center;
+    gap: rem(8);
+    padding: rem(4) rem(8);
+    border-radius: rem(4);
+
+    &:hover {
+        background-color: var(--transparent-white-10);
+    }
+
+    span {
+        color: var(--slate-50);
+        font-size: rem(14);
+    }
+}
+
+.btn-settings {
+    display: flex;
+    padding: rem(4);
+
+    &:hover {
+        background-color: var(--transparent-white-10);
+    }
 }
 </style>

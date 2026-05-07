@@ -6,6 +6,7 @@
 
 :root {
     --white: #ffffff;
+    --black: #000000;
     --vt-c-white-soft: #f8f8f8;
     --vt-c-white-mute: #f2f2f2;
 
@@ -36,9 +37,11 @@
     --slate-700: #334155;
     --slate-800: #1e293b;
     --slate-900: #0f172a;
+    --slate-950: #020617;
     --emerald-200: #a7f3d0;
     --emerald-300: #86efac;
     --emerald-500: #10b981;
+    --yellow-100: #fef9c3;
     --yellow-200: #fef08a;
     --indigo-200: #c7d2fe;
     --indigo-300: #a5b4fc;
@@ -135,4 +138,23 @@ li {
 button {
     padding: 0;
     margin: 0;
+}
+
+svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: var(--slate-300);
+}
+
+.visually-hidden {
+    border: 0;
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(50%);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
 }

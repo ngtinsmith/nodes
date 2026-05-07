@@ -70,6 +70,10 @@ const boardStore = useBoards();
         color: var(--slate-50);
         font-size: rem(14);
     }
+
+    svg {
+        fill: var(--emerald-300);
+    }
 }
 
 .btn-filter {
@@ -80,6 +84,10 @@ const boardStore = useBoards();
 
     &:hover {
         background-color: var(--transparent-white-10);
+    }
+
+    svg {
+        fill: var(--slate-50);
     }
 }
 

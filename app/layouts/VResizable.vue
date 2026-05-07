@@ -163,11 +163,11 @@ const blockStyle = computed(() => {
 }
 
 .top {
-    border-bottom: 1px solid var(--resizable-border-color);
     overflow-y: auto;
 
     &.vertical {
         min-height: 300px;
+        border-bottom: 1px solid var(--resizable-border-color);
     }
     &.root.stacked {
         max-width: 360px;

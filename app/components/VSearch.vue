@@ -41,7 +41,7 @@ const sidebarStore = useSidebar();
 
 <style lang="scss" scoped>
 .search {
-    --field-color: var(--gray-500);
+    --field-color: var(--slate-500);
 
     display: flex;
     align-items: center;

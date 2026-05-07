@@ -42,7 +42,7 @@ const progressPercentageStyle = computed(() => `${progressPercentage.value}%`);
 
     span {
         font-size: rem(12);
-        color: var(--gray-400);
+        color: var(--slate-400);
     }
 }
 </style>

@@ -172,7 +172,7 @@ main {
 svg {
     width: rem(20);
     height: rem(20);
-    fill: var(--gray-300);
+    fill: var(--slate-300);
 }
 
 .visually-hidden {

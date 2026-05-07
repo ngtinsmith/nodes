@@ -92,7 +92,7 @@ Quo tandem modo? Ex rebus enim timiditas, non ex vocabulis nascitur. Sedulo, inq
 
 <style lang="scss" scoped>
 .node-content {
-    --border-color: var(--gray-100);
+    --border-color: var(--slate-100);
     --locked-color: var(--indigo-500);
 
     display: flex;

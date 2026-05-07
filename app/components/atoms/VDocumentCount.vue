@@ -28,7 +28,7 @@ defineProps<Props>();
 
     span {
         font-size: rem(12);
-        color: var(--gray-400);
+        color: var(--slate-400);
         margin-left: rem(6);
     }
 }

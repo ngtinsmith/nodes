@@ -85,7 +85,7 @@ const sidebarGroups = computed(() =>
         font-size: rem(14);
         font-weight: 700;
         text-align: left;
-        color: var(--gray-200);
+        color: var(--slate-200);
     }
 
     svg {

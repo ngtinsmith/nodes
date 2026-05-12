@@ -1,7 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
-    css: ['~/assets/css/base.css', '~/styles/_colors.scss'],
+    css: ['~/assets/css/base.css', '~/assets/scss/main.scss'],
     devtools: { enabled: true },
     modules: ['@pinia/nuxt', 'nuxt-svgo', '@nuxt/eslint'],
     svgo: {
@@ -25,7 +25,7 @@ export default defineNuxtConfig({
             preprocessorOptions: {
                 scss: {
                     additionalData: `
-                        @use "~/styles/_helpers.scss" as *;
+                        @use "~/assets/scss/helpers" as *;
                     `,
                 },
             },

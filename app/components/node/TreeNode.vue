@@ -2,12 +2,12 @@
 import { computed, inject, ref } from 'vue';
 import { useNodes } from '@/stores/nodes';
 import type { Node } from '@/stores/nodes/interfaces';
-import VCheckbox from '@/components/VCheckbox.vue';
-import VNodeControls from './VNodeControls.vue';
+import NodeControls from './NodeControls.vue';
 import type { NodeModal } from '~/types/modal';
 import { nodeModalKey } from '~/types/symbols';
+import Checkbox from '../atoms/Checkbox.vue';
 
-export interface NodeItemProps {
+export interface TreeNodeProps {
     node: Node;
     root?: boolean;
     parentId?: string;
@@ -15,7 +15,7 @@ export interface NodeItemProps {
     treeLine?: boolean; // TODO: test provide/inject
 }
 
-const props = defineProps<NodeItemProps>();
+const props = defineProps<TreeNodeProps>();
 const nodeModalInject = inject<NodeModal>(nodeModalKey);
 
 const nodeStore = useNodes();
@@ -138,7 +138,7 @@ function expandNode() {
                         />
                     </button>
                     <div class="checkbox-wrapper">
-                        <VCheckbox
+                        <Checkbox
                             :checked="node.complete"
                             @click="toggleCheck"
                         />
@@ -155,7 +155,7 @@ function expandNode() {
                     </div>
                 </div>
                 <div class="controls">
-                    <VNodeControls
+                    <NodeControls
                         :focused="isFocused"
                         @toggle="toggleSubControl"
                         @add-into="addInto"
@@ -187,7 +187,7 @@ function expandNode() {
                     },
                 ]"
             />
-            <VNode
+            <TreeNode
                 v-for="(childNode, idx) in node.children"
                 :key="childNode.id"
                 :node="childNode"

@@ -1,15 +1,14 @@
 <script setup lang="ts">
-import VNode from './VNode.vue';
-import VProgressOverview from './VProgressOverview.vue';
 import type { Node } from '@/stores/nodes/interfaces';
+import TreeNode from '../node/TreeNode.vue';
 
-export interface NodeCollectionProps {
+export interface TreeCardProps {
     id: string;
     title: string;
     node: Node | null;
 }
 
-const props = defineProps<NodeCollectionProps>();
+const props = defineProps<TreeCardProps>();
 </script>
 
 <template>
@@ -30,7 +29,7 @@ const props = defineProps<NodeCollectionProps>();
         </div>
         <div class="content">
             <div class="tree">
-                <VNode
+                <TreeNode
                     v-if="node"
                     root
                     :node="node"
@@ -39,7 +38,7 @@ const props = defineProps<NodeCollectionProps>();
             </div>
         </div>
         <div class="footer">
-            <VProgressOverview
+            <OverviewProgress
                 :current="10"
                 :total="25"
             />

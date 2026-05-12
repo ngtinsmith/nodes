@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { IProgress } from '~/types/summary/progress';
-import VProgressBar from './atoms/VProgressBar.vue';
-import VProgressNumbers from './atoms/VProgressNumbers.vue';
+import ProgressNumbers from '../atoms/ProgressNumbers.vue';
+import ProgressBar from '../atoms/ProgressBar.vue';
 
 const { current, total } = defineProps<IProgress>();
 </script>
@@ -9,13 +9,13 @@ const { current, total } = defineProps<IProgress>();
 <template>
     <div class="progress-overview">
         <div class="left">
-            <VProgressNumbers
+            <ProgressNumbers
                 :current="current"
                 :total="total"
             />
         </div>
         <div class="right">
-            <VProgressBar
+            <ProgressBar
                 :current="current"
                 :total="total"
             />

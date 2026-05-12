@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import VProgressOverview from './VProgressOverview.vue';
-import VDocumentOverview from './VDocumentOverview.vue';
 import type { Board } from '~/stores/boards/interfaces';
 
 interface Props {
@@ -22,12 +20,12 @@ const { board } = defineProps<Props>();
             </div>
         </div>
         <div class="bottom">
-            <VProgressOverview
+            <OverviewProgress
                 v-if="board.type === 'todo'"
                 :current="board.progressCurrent"
                 :total="board.progressTotal"
             />
-            <VDocumentOverview
+            <OverviewDocument
                 v-if="board.type === 'document'"
                 :documents="board.countDocs"
                 :notes="board.countNotes"

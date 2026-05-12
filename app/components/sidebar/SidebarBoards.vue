@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import VBoard from '~/components/VBoard.vue';
-import VSearch from '~/components/VSearch.vue';
 import { useBoards } from '~/stores/boards';
 
 const boardStore = useBoards();
@@ -9,7 +7,7 @@ const boardStore = useBoards();
 <template>
     <div class="board">
         <div class="top">
-            <VSearch context="group" />
+            <ProjectSearch context="group" />
         </div>
         <div class="controls">
             <button class="btn-add">
@@ -21,7 +19,7 @@ const boardStore = useBoards();
             </button>
         </div>
         <div class="views">
-            <VBoard
+            <BoardCard
                 v-for="board in boardStore.boards"
                 :key="board.id"
                 :board="board"

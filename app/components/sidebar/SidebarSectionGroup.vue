@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { IGroup } from '~/stores/sidebar/interfaces';
 
-export interface SidebarGroupProps {
+export interface SidebarSectionGroupProps {
     heading: string;
     sections: IGroup[];
     generic?: boolean;
 }
 
-defineProps<SidebarGroupProps>();
+defineProps<SidebarSectionGroupProps>();
 </script>
 
 <template>

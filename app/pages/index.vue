@@ -1,10 +1,10 @@
 <template>
-    <AppHeader />
+    <NavHeader />
     <main v-bind="$attrs">
-        <HomepageHero />
-        <TrialBanner />
+        <HeroHomepage />
+        <BannerTrial />
     </main>
-    <AppFooter />
+    <NavFooter />
 </template>
 
 <style lang="scss" scoped>

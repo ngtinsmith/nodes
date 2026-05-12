@@ -1,20 +1,14 @@
 <script setup lang="ts">
 import { computed, onMounted, provide, ref } from 'vue';
-import VCard from '~/components/VCard.vue';
-import VCanvas from '~/layouts/VCanvas.vue';
-import VProjectSections from '~/layouts/Sidebar/VProjectSections.vue';
-import VBoards from '~/layouts/Sidebar/VBoards.vue';
-import VModal from '~/components/VModal.vue';
 import type { Node } from '~/stores/nodes/interfaces';
 import type { NodeModal } from '~/types/modal';
 import { nodeModalKey } from '~/types/symbols';
-import VNodeContent from '~/components/VNodeContent.vue';
 import { useSidebar } from '~/stores/sidebar';
-import VResizable from '~/layouts/VResizable.vue';
+import Resizable from '~/components/resizable/Resizable.vue';
 import { useCards } from '~/stores/cards';
 import { useProjects } from '~/stores/projects';
-import BoardTab from '~/components/atoms/BoardTab.vue';
 import { useBoards } from '~/stores/boards';
+import TreeCard from '~/components/workspace/TreeCard.vue';
 
 provide<NodeModal>(nodeModalKey, {
     expandNodeContent,
@@ -64,7 +58,7 @@ function exitFullscreen() {
 
 <template>
     <main>
-        <VResizable
+        <Resizable
             direction="horizontal"
             :left="sidebarStore.config.stacked ? 25 : 40"
             root
@@ -74,19 +68,19 @@ function exitFullscreen() {
                 v-if="sidebarStore.config.enabled"
                 #top
             >
-                <VResizable
+                <Resizable
                     :direction="
                         sidebarStore.config.stacked ? 'vertical' : 'horizontal'
                     "
                     :[sidebarConfig.attr]="sidebarConfig.value"
                 >
                     <template #top>
-                        <VProjectSections />
+                        <SidebarSections />
                     </template>
                     <template #bottom>
-                        <VBoards />
+                        <SidebarBoards />
                     </template>
-                </VResizable>
+                </Resizable>
             </template>
             <template #bottom>
                 <div class="workspace">
@@ -96,7 +90,7 @@ function exitFullscreen() {
                                 v-for="(board, i) in boardsStore.activeBoards"
                                 :key="board.id"
                             >
-                                <BoardTab :board="board" />
+                                <WorkspaceTab :board="board" />
                                 <div
                                     v-if="
                                         i ===
@@ -119,8 +113,8 @@ function exitFullscreen() {
                         ref="mainContentRef"
                         class="main-content"
                     >
-                        <VCanvas>
-                            <VCard
+                        <div class="panel">
+                            <TreeCard
                                 v-for="(card, i) in cardsStore.mappedCards"
                                 :id="card.id"
                                 :key="card.id ?? i"
@@ -131,8 +125,8 @@ function exitFullscreen() {
                                 <AddFilled />
                                 <span> Add new card </span>
                             </button>
-                        </VCanvas>
-                        <VModal
+                        </div>
+                        <NodeModal
                             v-if="mainContentRef"
                             :open="isOpenModal"
                             :to="mainContentRef"
@@ -140,17 +134,17 @@ function exitFullscreen() {
                             align="right"
                             :fullscreen="isFullscreenModal"
                         >
-                            <VNodeContent
+                            <NodeContent
                                 :fullscreen="isFullscreenModal"
                                 @close="closeModal"
                                 @fullscreen="enterFullscreen"
                                 @exit-fullscreen="exitFullscreen"
                             />
-                        </VModal>
+                        </NodeModal>
                     </div>
                 </div>
             </template>
-        </VResizable>
+        </Resizable>
     </main>
 </template>
 
@@ -188,6 +182,18 @@ main {
     justify-content: space-between;
     margin-inline: auto;
     height: calc(100% - rem(48));
+}
+
+.panel {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: rem(8);
+    padding: rem(8);
+    width: 100%;
+    height: 100%;
+    background-color: var(--indigo-200);
+    overflow-x: auto;
 }
 
 .btn-new-card {

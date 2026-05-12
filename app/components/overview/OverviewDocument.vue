@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import VDocumentCount from './atoms/VDocumentCount.vue';
+import DocumentCount from '../atoms/DocumentCount.vue';
 
 interface Props {
     documents: number;
@@ -11,16 +11,16 @@ defineProps<Props>();
 
 <template>
     <div class="document-overview">
-        <VDocumentCount
+        <DocumentCount
             label="documents"
             :count="documents"
         />
-        <VDocumentCount
+        <DocumentCount
             label="notes"
             :count="notes"
         >
             <Notes />
-        </VDocumentCount>
+        </DocumentCount>
     </div>
 </template>
 

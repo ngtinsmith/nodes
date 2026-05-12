@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { IGroup } from '~/stores/sidebar/interfaces';
-import VSidebarGroup, { type SidebarGroupProps } from './VSidebarGroup.vue';
 import { useSections } from '~/stores/sections';
+import type { SidebarSectionGroupProps } from './SidebarSectionGroup.vue';
 
 const sectionsStore = useSections();
 
 const sidebarGroups = computed(() =>
-    sectionsStore.sectionGroups.map<SidebarGroupProps>((group, i) => {
+    sectionsStore.sectionGroups.map<SidebarSectionGroupProps>((group, i) => {
         return {
             id: group.tag?.id || i,
             heading: group.tag?.title || 'Section Group',
@@ -34,7 +34,7 @@ const sidebarGroups = computed(() =>
             </div>
         </div>
         <div class="content">
-            <VSidebarGroup
+            <SidebarSectionGroup
                 v-for="(group, i) in sidebarGroups"
                 :key="i"
                 :heading="group.heading"

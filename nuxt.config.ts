@@ -3,7 +3,12 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     css: ['~/assets/css/base.css', '~/assets/scss/main.scss'],
     devtools: { enabled: true },
-    modules: ['@pinia/nuxt', 'nuxt-svgo', '@nuxt/eslint'],
+    modules: ['@pinia/nuxt', 'nuxt-svgo', '@nuxt/eslint', '@nuxt/fonts'],
+    fonts: {
+        defaults: {
+            weights: [400, 500, 700, 900],
+        },
+    },
     svgo: {
         autoImportPath: false,
         defaultImport: 'component',
@@ -32,4 +37,3 @@ export default defineNuxtConfig({
         },
     },
 });
-

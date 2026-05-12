@@ -10,7 +10,6 @@
     --vt-c-white-soft: #f8f8f8;
     --vt-c-white-mute: #f2f2f2;
 
-    --vt-c-black: #181818;
     --vt-c-black-soft: #222222;
     --vt-c-black-mute: #282828;
 
@@ -61,11 +60,13 @@
     --color-text: var(--vt-c-text-light-1);
 
     --resizable-border-color: var(--slate-700);
+    --dark-slate: var(--slate-900);
+    --base-text-color: var(--slate-50);
 }
 
 @media (prefers-color-scheme: dark) {
     :root {
-        --color-background: var(--vt-c-black);
+        --color-background: var(--dark-slate);
         --color-background-soft: var(--vt-c-black-soft);
         --color-background-mute: var(--vt-c-black-mute);
 
@@ -76,6 +77,8 @@
         --color-text: var(--vt-c-text-dark-2);
     }
 }
+
+/* Base */
 
 *,
 *::before,
@@ -131,8 +134,9 @@ li {
     list-style-type: none;
 }
 
-.nuxt-icon {
-    margin: 0;
+a {
+    text-decoration: none;
+    color: var(--base-text-color);
 }
 
 button {
@@ -144,7 +148,10 @@ svg {
     width: 1.25rem;
     height: 1.25rem;
     fill: var(--slate-300);
+    transition: fill 0.15s ease-in;
 }
+
+/* Utils */
 
 .visually-hidden {
     border: 0;
@@ -157,4 +164,16 @@ svg {
     position: absolute;
     white-space: nowrap;
     width: 1px;
+}
+
+/* Overrides */
+
+#__nuxt {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.nuxt-icon {
+    margin: 0;
 }

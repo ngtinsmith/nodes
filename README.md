@@ -1,6 +1,6 @@
 # Preview
 
-<img width="1717" height="816" alt="image" src="https://github.com/user-attachments/assets/45ead3dc-d978-48c5-af92-de21b922d980" />
+<img width="1600" height="807" alt="image" src="https://raw.githubusercontent.com/ngtinsmith/nodes/refs/heads/master/app/assets/images/project-preview.png" />
 
 # Nuxt Minimal Starter
 

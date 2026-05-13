@@ -3,12 +3,12 @@
         <div class="container">
             <div class="content">
                 <p>© 2026 - Fractal Notes</p>
-                <a
+                <NuxtLink
                     class="social-link"
-                    href="https://github.com/ngtinsmith/nodes"
+                    to="https://github.com/ngtinsmith/nodes"
                 >
                     <Github />
-                </a>
+                </NuxtLink>
             </div>
         </div>
     </footer>

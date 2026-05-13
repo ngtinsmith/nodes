@@ -10,6 +10,8 @@ import { useProjects } from '~/stores/projects';
 import { useBoards } from '~/stores/boards';
 import TreeCard from '~/components/workspace/TreeCard.vue';
 
+definePageMeta({ layout: false });
+
 provide<NodeModal>(nodeModalKey, {
     expandNodeContent,
 });

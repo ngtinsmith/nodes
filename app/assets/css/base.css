@@ -39,6 +39,7 @@
     --slate-950: #020617;
     --emerald-200: #a7f3d0;
     --emerald-300: #86efac;
+    --emerald-400: #34d399;
     --emerald-500: #10b981;
     --yellow-100: #fef9c3;
     --yellow-200: #fef08a;
@@ -89,8 +90,14 @@
     font-weight: normal;
 }
 
+html,
+body,
+#__nuxt {
+    height: 100%;
+}
+
 body {
-    min-height: 100vh;
+    min-height: 100dvh;
     color: var(--color-text);
     background: var(--color-background);
     transition:
@@ -114,6 +121,17 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+header,
+footer {
+    flex-shrink: 0;
 }
 
 button {
@@ -171,7 +189,6 @@ svg {
 #__nuxt {
     display: flex;
     flex-direction: column;
-    height: 100%;
 }
 
 .nuxt-icon {

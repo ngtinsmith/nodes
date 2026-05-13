@@ -3,7 +3,14 @@ export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     css: ['~/assets/css/base.css', '~/assets/scss/main.scss'],
     devtools: { enabled: true },
-    modules: ['@pinia/nuxt', 'nuxt-svgo', '@nuxt/eslint', '@nuxt/fonts'],
+    modules: [
+        '@pinia/nuxt',
+        'nuxt-svgo',
+        '@nuxt/eslint',
+        '@nuxt/fonts',
+        'reka-ui/nuxt',
+        '@regle/nuxt',
+    ],
     fonts: {
         defaults: {
             weights: [400, 500, 700, 900],
@@ -37,3 +44,4 @@ export default defineNuxtConfig({
         },
     },
 });
+

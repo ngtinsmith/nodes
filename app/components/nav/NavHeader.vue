@@ -18,13 +18,13 @@ const routes: { title: string; url: string }[] = [
 <template>
     <header>
         <div class="container header-inner">
-            <a
+            <NuxtLink
                 class="logo"
-                href="/"
+                to="/"
             >
                 <NetworkAlt />
                 <p>Fractal <span class="logo-highlight">Nodes</span></p>
-            </a>
+            </NuxtLink>
 
             <nav>
                 <ul class="nav-links">
@@ -33,10 +33,10 @@ const routes: { title: string; url: string }[] = [
                         :key="route.title"
                         class="nav-link"
                     >
-                        <a :href="route.url">{{ route.title }}</a>
+                        <NuxtLink :to="route.url">{{ route.title }}</NuxtLink>
                     </li>
                     <li class="btn-signup">
-                        <a href="/sign-in">Sign Up</a>
+                        <NuxtLink to="/signup">Sign Up</NuxtLink>
                     </li>
                 </ul>
             </nav>
@@ -67,7 +67,7 @@ header {
     gap: rem(16);
 
     svg {
-        --logo-size: #{rem(32)};
+        --logo-size: #{rem(24)};
 
         fill: var(--emerald-300);
         width: var(--logo-size);
